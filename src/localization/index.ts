@@ -202,7 +202,7 @@ export const messages = {
       Claim: {
         cta: "Claim Rewards",
         ctamulti: "Claim All Rewards",
-        delegated: "Claimed Rewards",
+        claimed: "Claimed Rewards",
         error: "Error",
       },
       Redelegate: {
