@@ -17,6 +17,10 @@ import { toPlainObjectString } from "@/utility";
 import { DeliverTxResponse } from "@cosmjs/stargate";
 import chainConfig from "@/chain-config.json";
 import DropDown from "../ui/DropDown.vue";
+import { useQueryClient } from '@tanstack/vue-query';
+// Get QueryClient from the context
+const queryClient = useQueryClient();
+
 
 interface Props {
   validatorAddress: string;
@@ -80,6 +84,8 @@ const signRedelegation = async (isCLI = false) => {
       transacting.value = false;
       cliDelegationInput.value = (isCLI ? depot : "") as string;
       displayState.value = isCLI ? "CLI" : "delegated";
+      queryClient.invalidateQueries({ queryKey: ['delegations'] });
+      queryClient.invalidateQueries({ queryKey: ['validators'] });
     }
   } catch (e) {
     console.log(e);
@@ -98,9 +104,8 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
   <div class="relative">
     <div>
       <div
-        class="justify-center px-3 py-2 mr-2 rounded link-gradient text-dark text-200 text-center cursor-pointer"
-        @click="() => toggleModal(true)"
-      >
+        class="justify-center px-3 py-2 mr-1 rounded bg-light hover:bg-grey-50 text-dark text-100 text-center cursor-pointer"
+        @click="() => toggleModal(true)">
         {{ $t("components.Redelegate.cta") }}
       </div>
     </div>
@@ -109,58 +114,44 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
       <div class="bg-grey-400 w-full rounded-md max-h-screen overflow-auto">
         <div class="px-10 py-12 bg-grey-400 rounded w-screen max-w-[25rem]">
           <div v-show="displayState === 'pending'" class="flex flex-col gap-6 relative">
-            <span class="text-gradient font-termina text-700 text-center">{{ $t("components.Redelegate.cta") }}</span
-            >3
+            <span class="text-gradient font-termina text-700 text-center">{{ $t("components.Redelegate.cta") }}</span>
             <div class="flex flex-col gap-10">
               <div>
                 <div class="flex flex-col gap-10">
                   <form class="flex flex-col items-center gap-2">
-                    <UiInput
-                      v-model="redelegationAmount"
-                      type="number"
-                      placeholder="e.g. 50"
-                      label="Amount to redelegate"
-                      :min="0"
+                    <UiInput v-model="redelegationAmount" type="number" placeholder="e.g. 50"
+                      label="Amount to redelegate" :min="0"
                       :max="Number(delegationAmount) / Math.pow(10, delegationDenomDecimals)"
-                      class="w-full justify-end"
-                    />
-                    <DropDown
-                      :values="validatorList.map((x) => x.description.moniker)"
-                      :model-value="validatorIndex"
-                      @select="handleValChange"
-                    />
+                      class="w-full justify-end" />
+                    <div class="w-full flex flex-col ml-1 mt-3">
+                      <span>Redelegate to:</span>
+                      <DropDown :values="validatorList.map((x) => x.description.moniker)" :model-value="validatorIndex"
+                        @select="handleValChange" />
+                    </div>
                   </form>
                 </div>
               </div>
 
               <div v-if="!transacting" class="flex flex-col gap-4">
                 <div v-show="(redelegationAmount ?? -1) > 0" class="flex flex-col gap-4">
-                  <button
-                    class="px-6 py-4 rounded link-gradient text-dark text-300 text-center w-full"
-                    @click="signRedelegation(true)"
-                  >
+                  <button class="px-6 py-4 rounded link-gradient text-dark text-300 text-center w-full"
+                    @click="signRedelegation(true)">
                     {{ $t("ui.actions.cli") }}
                   </button>
-                  <a
-                    href="https://github.com/atomone-hub/atom.one/blob/main/submit-tx-securely.md"
-                    target="_blank"
-                    class="text-center text-100 text-grey-100 underline"
-                  >
+                  <a href="https://github.com/atomone-hub/atom.one/blob/main/submit-tx-securely.md" target="_blank"
+                    class="text-center text-100 text-grey-100 underline">
                     {{ $t("ui.actions.signTxSecurely") }}
                   </a>
-                  <button
-                    v-if="used != Wallets.addressOnly"
+                  <button v-if="used != Wallets.addressOnly"
                     class="px-6 py-4 rounded text-light text-300 text-center w-full hover:opacity-50 duration-150 ease-in-out"
-                    @click="signRedelegation()"
-                  >
+                    @click="signRedelegation()">
                     {{ $t("ui.actions.confirm") }}
                   </button>
                 </div>
 
                 <button
                   class="px-6 py-4 rounded text-light text-300 text-center w-full hover:opacity-50 duration-150 ease-in-out"
-                  @click="toggleModal(false)"
-                >
+                  @click="toggleModal(false)">
                   {{ $t("ui.actions.cancel") }}
                 </button>
               </div>
@@ -179,32 +170,25 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
             </div>
 
             <div class="relative">
-              <button
-                v-if="isClipboardSupported"
+              <button v-if="isClipboardSupported"
                 class="absolute top-4 right-4 text-200 hover:text-grey-50 duration-200"
-                @click="copy(cliDelegationInput)"
-              >
+                @click="copy(cliDelegationInput)">
                 <span v-show="copied">{{ $t("ui.actions.copied") }}</span>
                 <span v-show="!copied" class="flex gap-1">
                   <Icon icon="copy" /><span>{{ $t("ui.actions.copy") }}</span>
                 </span>
               </button>
-              <textarea
-                ref="CLIVote"
-                v-model="cliDelegationInput"
-                readonly
-                class="w-full h-64 px-4 pb-4 pt-12 bg-grey-200 text-grey-50 rounded outline-none resize-none"
-              ></textarea>
+              <textarea ref="CLIVote" v-model="cliDelegationInput" readonly
+                class="w-full h-64 px-4 pb-4 pt-12 bg-grey-200 text-grey-50 rounded outline-none resize-none"></textarea>
             </div>
 
             <div class="flex gap-x-4 items-stretch">
               <CommonButton class="w-full" @click="() => (displayState = 'pending')">{{
                 $t("ui.actions.back")
-              }}</CommonButton>
+                }}</CommonButton>
               <button
                 class="w-full text-light bg-grey-200 hover:bg-light hover:text-dark roudned transition-colors duration-200 rounded py-4 px-6"
-                @click="toggleModal(false)"
-              >
+                @click="toggleModal(false)">
                 {{ $t("ui.actions.done") }}
               </button>
             </div>
@@ -218,25 +202,19 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
 
             <button
               class="px-6 py-4 rounded text-light text-300 text-center bg-grey-200 w-full hover:opacity-50 duration-150 ease-in-out"
-              @click="toggleModal(false)"
-            >
+              @click="toggleModal(false)">
               {{ $t("ui.actions.done") }}
             </button>
           </div>
           <div v-show="displayState === 'error'">
             <UiInfo :title="$t('components.Redelegate.error')" type="warning" :circled="true">
-              <textarea
-                ref="error"
-                v-model="errorMsg"
-                readonly
-                class="w-full h-32 my-4 px-4 pb-4 pt-4 bg-grey-200 text-grey-50 rounded outline-none resize-none"
-              ></textarea>
+              <textarea ref="error" v-model="errorMsg" readonly
+                class="w-full h-32 my-4 px-4 pb-4 pt-4 bg-grey-200 text-grey-50 rounded outline-none resize-none"></textarea>
             </UiInfo>
 
             <button
               class="px-6 py-4 rounded text-light text-300 text-center bg-grey-200 w-full hover:opacity-50 duration-150 ease-in-out"
-              @click="toggleModal(false)"
-            >
+              @click="toggleModal(false)">
               {{ $t("ui.actions.done") }}
             </button>
           </div>

@@ -1,6 +1,6 @@
 {
-  "rpc": "https://atomone-rpc.allinbits.services/",
-  "rest": "https://atomone-api.allinbits.services/",
+  "rpc": "https://atomone-rpc.allinbits.com/",
+  "rest": "https://atomone-api.allinbits.com/",
   "chainId": "atomone-1",
   "chainName": "AtomOne",
   "bip44": {

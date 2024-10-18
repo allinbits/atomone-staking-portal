@@ -12,6 +12,9 @@ import { useValidators } from "@/composables/useValidators";
 
 import { toPlainObjectString } from "@/utility";
 import { DeliverTxResponse } from "@cosmjs/stargate";
+import { useQueryClient } from '@tanstack/vue-query';
+// Get QueryClient from the context
+const queryClient = useQueryClient();
 
 interface Props {
   validatorAddress: string[] | undefined;
@@ -51,6 +54,7 @@ const signClaim = async (isCLI = false) => {
       transacting.value = false;
       cliClaimInput.value = (isCLI ? depot : "") as string;
       displayState.value = isCLI ? "CLI" : "claimed";
+      queryClient.invalidateQueries({ queryKey: ['rewards'] });
     }
   } catch (e) {
     console.log(e);
@@ -67,9 +71,8 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
   <div class="relative">
     <div>
       <div
-        class="justify-center px-3 py-2 mr-2 rounded link-gradient text-dark text-200 text-center cursor-pointer"
-        @click="() => toggleModal(true)"
-      >
+        class="justify-center px-3 py-2 mr-1 rounded bg-light hover:bg-grey-50 text-dark text-100 text-center cursor-pointer"
+        @click="() => toggleModal(true)">
         {{
           validatorAddress && validatorAddress.length > 1 ? $t("components.Claim.ctamulti") : $t("components.Claim.cta")
         }}
@@ -84,32 +87,24 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
             <div class="flex flex-col gap-10">
               <div v-if="!transacting" class="flex flex-col gap-4">
                 <div class="flex flex-col gap-4">
-                  <button
-                    class="px-6 py-4 rounded link-gradient text-dark text-300 text-center w-full"
-                    @click="signClaim(true)"
-                  >
+                  <button class="px-6 py-4 rounded link-gradient text-dark text-300 text-center w-full"
+                    @click="signClaim(true)">
                     {{ $t("ui.actions.cli") }}
                   </button>
-                  <a
-                    href="https://github.com/atomone-hub/atom.one/blob/main/submit-tx-securely.md"
-                    target="_blank"
-                    class="text-center text-100 text-grey-100 underline"
-                  >
+                  <a href="https://github.com/atomone-hub/atom.one/blob/main/submit-tx-securely.md" target="_blank"
+                    class="text-center text-100 text-grey-100 underline">
                     {{ $t("ui.actions.signTxSecurely") }}
                   </a>
-                  <button
-                    v-if="used != Wallets.addressOnly"
+                  <button v-if="used != Wallets.addressOnly"
                     class="px-6 py-4 rounded text-light text-300 text-center w-full hover:opacity-50 duration-150 ease-in-out"
-                    @click="signClaim()"
-                  >
+                    @click="signClaim()">
                     {{ $t("ui.actions.confirm") }}
                   </button>
                 </div>
 
                 <button
                   class="px-6 py-4 rounded text-light text-300 text-center w-full hover:opacity-50 duration-150 ease-in-out"
-                  @click="toggleModal(false)"
-                >
+                  @click="toggleModal(false)">
                   {{ $t("ui.actions.cancel") }}
                 </button>
               </div>
@@ -128,32 +123,24 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
             </div>
 
             <div class="relative">
-              <button
-                v-if="isClipboardSupported"
-                class="absolute top-4 right-4 text-200 hover:text-grey-50 duration-200"
-                @click="copy(cliClaimInput)"
-              >
+              <button v-if="isClipboardSupported"
+                class="absolute top-4 right-4 text-200 hover:text-grey-50 duration-200" @click="copy(cliClaimInput)">
                 <span v-show="copied">{{ $t("ui.actions.copied") }}</span>
                 <span v-show="!copied" class="flex gap-1">
                   <Icon icon="copy" /><span>{{ $t("ui.actions.copy") }}</span>
                 </span>
               </button>
-              <textarea
-                ref="CLIVote"
-                v-model="cliClaimInput"
-                readonly
-                class="w-full h-64 px-4 pb-4 pt-12 bg-grey-200 text-grey-50 rounded outline-none resize-none"
-              ></textarea>
+              <textarea ref="CLIVote" v-model="cliClaimInput" readonly
+                class="w-full h-64 px-4 pb-4 pt-12 bg-grey-200 text-grey-50 rounded outline-none resize-none"></textarea>
             </div>
 
             <div class="flex gap-x-4 items-stretch">
               <CommonButton class="w-full" @click="() => (displayState = 'pending')">{{
                 $t("ui.actions.back")
-              }}</CommonButton>
+                }}</CommonButton>
               <button
                 class="w-full text-light bg-grey-200 hover:bg-light hover:text-dark roudned transition-colors duration-200 rounded py-4 px-6"
-                @click="toggleModal(false)"
-              >
+                @click="toggleModal(false)">
                 {{ $t("ui.actions.done") }}
               </button>
             </div>
@@ -165,25 +152,19 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
 
             <button
               class="px-6 py-4 rounded text-light text-300 text-center bg-grey-200 w-full hover:opacity-50 duration-150 ease-in-out"
-              @click="toggleModal(false)"
-            >
+              @click="toggleModal(false)">
               {{ $t("ui.actions.done") }}
             </button>
           </div>
           <div v-show="displayState === 'error'">
             <UiInfo :title="$t('components.Claim.error')" type="warning" :circled="true">
-              <textarea
-                ref="error"
-                v-model="errorMsg"
-                readonly
-                class="w-full h-32 my-4 px-4 pb-4 pt-4 bg-grey-200 text-grey-50 rounded outline-none resize-none"
-              ></textarea>
+              <textarea ref="error" v-model="errorMsg" readonly
+                class="w-full h-32 my-4 px-4 pb-4 pt-4 bg-grey-200 text-grey-50 rounded outline-none resize-none"></textarea>
             </UiInfo>
 
             <button
               class="px-6 py-4 rounded text-light text-300 text-center bg-grey-200 w-full hover:opacity-50 duration-150 ease-in-out"
-              @click="toggleModal(false)"
-            >
+              @click="toggleModal(false)">
               {{ $t("ui.actions.done") }}
             </button>
           </div>
