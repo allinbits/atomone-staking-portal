@@ -1,5 +1,8 @@
 <script lang="ts" setup>
+import AuditStatus from '@/components/warnings/AuditStatus.vue';
 import WalletConnect from "@/components/popups/WalletConnect.vue";
+
+const securityLink = 'https://github.com/allinbits/atomone-staking-portal/security';
 </script>
 
 <template>
@@ -8,7 +11,11 @@ import WalletConnect from "@/components/popups/WalletConnect.vue";
       <div class="flex flex-col md:flex-row justify-start gap-x-8 md:items-center select-none relative">
         <router-link to="/" class="text-500 font-termina py-4">{{ $t("homepage.title") }}</router-link>
       </div>
-      <WalletConnect class="hidden md:block" />
+      <div class="flex flex-row items-center justify-center gap-8">
+        <a :href="securityLink" target="_blank" class="hover:text-grey-100 duration-200">{{ $t("homepage.security") }}</a>
+        <WalletConnect class="hidden md:block" />
+      </div>
     </nav>
+    <AuditStatus :link="securityLink" />
   </header>
 </template>
