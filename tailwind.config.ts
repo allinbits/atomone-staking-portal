@@ -39,7 +39,7 @@ export default <Config>{
       darkblur: "#0009",
       red: {
         200: "#F9DBDB",
-        400: "#900909"
+        400: "#900909",
       },
       grey: {
         50: "#9F9F9F",
@@ -93,6 +93,7 @@ export default <Config>{
     fontSize: {
       0: "0",
       50: [`${pxToRem(8)}rem`, { lineHeight: `${pxToRem(10)}rem` }],
+      75: [`${pxToRem(11)}rem`, { lineHeight: `${pxToRem(13)}rem` }],
       100: [`${pxToRem(13)}rem`, { lineHeight: `${pxToRem(16)}rem` }],
       200: [`${pxToRem(15)}rem`, { lineHeight: `${pxToRem(16)}rem` }],
       300: [`${pxToRem(17)}rem`, { lineHeight: `${pxToRem(24)}rem` }],
