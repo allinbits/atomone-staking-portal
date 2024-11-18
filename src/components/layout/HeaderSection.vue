@@ -2,7 +2,7 @@
 import AuditStatus from "@/components/warnings/AuditStatus.vue";
 import WalletConnect from "@/components/popups/WalletConnect.vue";
 
-const securityLink = "https://github.com/allinbits/atomone-staking-portal/security";
+const securityLink = "https://github.com/allinbits/security/";
 </script>
 
 <template>
@@ -14,7 +14,7 @@ const securityLink = "https://github.com/allinbits/atomone-staking-portal/securi
       <div class="flex flex-row items-center justify-center gap-8">
         <a :href="securityLink" target="_blank" class="hover:text-grey-100 duration-200">{{
           $t("homepage.security")
-        }}</a>
+          }}</a>
         <WalletConnect class="hidden md:block" />
       </div>
     </nav>
