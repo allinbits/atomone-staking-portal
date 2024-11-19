@@ -7,7 +7,7 @@ All in Bits (AiB), Inc., a Delaware corporation, operates the Services. AiB and 
 
 If you do not want us to collect, use, or disclose your personal data in the ways described in this Policy, please do not use or otherwise interact with the Services, provide us with your personal data, or authorize any third party to make your personal data available to us. By using or interacting with the Services, you acknowledge that you understand that we may use your personal data as described in this Policy.
 
-Please note, as described in this Policy, we may receive your personal data from third parties that have not expressly told you that they will provide your personal data to us. If you have any questions about how we collect, use, protect, or disclose your personal data in connection with our platform, please contact us by email at <legal{'@'}allinbits.com>).
+Please note, as described in this Policy, we may receive your personal data from third parties that have not expressly told you that they will provide your personal data to us. If you have any questions about how we collect, use, protect, or disclose your personal data in connection with our platform, please contact us by email at <legal{'@'}allinbits.com>.
 
 **1. Scope and Applicability**  
 This Privacy Policy explains how All in Bits, Inc. collects, uses, discloses, and protects your information when you access or use the Services and related web-hosted user interfaces at  [https://atom.one](https://atom.one), [https://staking.atom.one/](https://staking.atom.one/) and [https://gov.atom.one/](https://gov.atom.one/) (collectively, the “Interface”). By accessing or using the Interface, you consent to the collection and use of your information as described in this Privacy Policy.
