@@ -16,13 +16,12 @@ const links = [
       <!-- Footer Social Links-->
       <div class="flex flex-col md:flex-row gap-4 justify-end">
         <div class="flex gap-4">
-          <a
-            v-for="(linkData, index) in links"
-            :key="index"
-            class="flex items-center"
-            :href="linkData.url"
-            target="_blank"
-          >
+          <RouterLink to="/terms" class="flex items-center hover:text-grey-50">Terms of Service</RouterLink> -
+          <RouterLink to="/privacy" class="flex items-center hover:text-grey-50">Privacy Policy</RouterLink>
+        </div>
+        <div class="flex gap-4">
+          <a v-for="(linkData, index) in links" :key="index" class="flex items-center" :href="linkData.url"
+            target="_blank">
             <Icon :icon="linkData.icon" class="hover:text-grey-50 hover:cursor-pointer" />
           </a>
         </div>
