@@ -8,8 +8,8 @@ We reserve the right to modify or amend these Staking Terms or the AtomOne Terms
 
 THE ATOMONE TERMS SET FORTH THE LEGALLY BINDING TERMS AND CONDITIONS, YOUR RIGHTS AND OBLIGATIONS, OUR DISCLAIMERS AND LIMITATIONS OF LEGAL LIABILITY THAT GOVERN YOUR USE OF THE INTERFACE. BY SIGNING MESSAGE TO BE RECORDED ON-CHAIN THAT INCLUDES A LINK TO THESE TERMS ACCESSING OR USING THE INTERFACE, YOU ARE ACCEPTING THE ATOMONE TERMS (ON BEHALF OF YOURSELF OR THE ENTITY THAT YOU REPRESENT), INCLUDING, WITHOUT LIMITATION, THE MANDATORY ARBITRATION PROVISION IN SECTION 17 AND WAIVER OF JURY TRIAL. IF YOU DO NOT AGREE WITH ALL OF THE PROVISIONS OF THE ATOMONE TERMS, DO NOT ACCESS OR USE THE INTERFACE OR ANY OF OUR SERVICES.
 
-| The Interface, Services and any other features offered or made available by us are not offered to U.S. Persons or Restricted Persons (each as further defined below), and any such use is prohibited. Any use of a virtual private network (VPN) or any other privacy or anonymization tools or techniques to circumvent, or attempt to circumvent, any restrictions that apply are prohibited. WE RESERVE ALL RIGHTS TO TAKE ACTION AGAINST ANY PERSON VIOLATING, CIRCUMVENTING OR ATTEMPTING TO CIRCUMVENT SUCH RESTRICTIONS, INCLUDING LEGAL ACTION AND/OR TEMPORARILY OR PERMANENTLY RESTRICT ACCESS TO THE INTERFACE AND THE SERVICES. “U.S. Person” shall mean any natural person or legal entity who (i) resides, (ii) is located (iii) is incorporated, or (iv) has a registered office, in the United States of America. “Restricted Person” shall mean any natural person or legal entity who (i) resides, (ii) is located (iii) is incorporated, or (iv) has a registered office, in any Restricted Jurisdiction (as further defined below). |
-| :---- |
+{'|'} The Interface, Services and any other features offered or made available by us are not offered to U.S. Persons or Restricted Persons (each as further defined below), and any such use is prohibited. Any use of a virtual private network (VPN) or any other privacy or anonymization tools or techniques to circumvent, or attempt to circumvent, any restrictions that apply are prohibited. WE RESERVE ALL RIGHTS TO TAKE ACTION AGAINST ANY PERSON VIOLATING, CIRCUMVENTING OR ATTEMPTING TO CIRCUMVENT SUCH RESTRICTIONS, INCLUDING LEGAL ACTION AND/OR TEMPORARILY OR PERMANENTLY RESTRICT ACCESS TO THE INTERFACE AND THE SERVICES. “U.S. Person” shall mean any natural person or legal entity who (i) resides, (ii) is located (iii) is incorporated, or (iv) has a registered office, in the United States of America. “Restricted Person” shall mean any natural person or legal entity who (i) resides, (ii) is located (iii) is incorporated, or (iv) has a registered office, in any Restricted Jurisdiction (as further defined below). {'|'}
+{'|'} :---- {'|'}
 
 # **2. Service Description**
 
@@ -171,7 +171,7 @@ Carolyn Pehrson ACP \# 153281
 3395 South Jones Blvd. \# 153  
 Las Vegas, NV 89146  
 Phone: 661-388-6953  
-Email: [legal@allinbits.com](mailto:legal@allinbits.com)
+Email: <legal{'@'}allinbits.com>
 
 **Counter-Notification Process**  
 If your content is removed or disabled based on a DMCA notification, you have the right to submit a counter-notification if you believe the removal or disabling was the result of an error or misidentification of the material.  
@@ -287,7 +287,7 @@ Either party may terminate this agreement at any time. Upon termination, your pe
 
 # **19.**  **Contact**
 
-You may contact the operator regarding any questions, concerns, or notices related to these terms by emailing the operator at legal@allinbits.com. Any notices or communications sent to the operator under these terms should be directed to this email address.
+You may contact the operator regarding any questions, concerns, or notices related to these terms by emailing the operator at legal{'@'}allinbits.com. Any notices or communications sent to the operator under these terms should be directed to this email address.
 
 The operator may contact you regarding these terms or any matter related to your account through the email address you provide upon registration. Additionally, the operator may deliver notices by posting them on the homepage of the Interface, in your account page, or through other visible locations on the Interface as necessary.
 

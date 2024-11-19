@@ -7,7 +7,7 @@ All in Bits (AiB), Inc., a Delaware corporation, operates the Services. AiB and 
 
 If you do not want us to collect, use, or disclose your personal data in the ways described in this Policy, please do not use or otherwise interact with the Services, provide us with your personal data, or authorize any third party to make your personal data available to us. By using or interacting with the Services, you acknowledge that you understand that we may use your personal data as described in this Policy.
 
-Please note, as described in this Policy, we may receive your personal data from third parties that have not expressly told you that they will provide your personal data to us. If you have any questions about how we collect, use, protect, or disclose your personal data in connection with our platform, please contact us by email at [**legal@allinbits.com**](mailto:legal@allinbits.com).
+Please note, as described in this Policy, we may receive your personal data from third parties that have not expressly told you that they will provide your personal data to us. If you have any questions about how we collect, use, protect, or disclose your personal data in connection with our platform, please contact us by email at <legal{'@'}allinbits.com>).
 
 **1. Scope and Applicability**  
 This Privacy Policy explains how All in Bits, Inc. collects, uses, discloses, and protects your information when you access or use the Services and related web-hosted user interfaces at  [https://atom.one](https://atom.one), [https://staking.atom.one/](https://staking.atom.one/) and [https://gov.atom.one/](https://gov.atom.one/) (collectively, the “Interface”). By accessing or using the Interface, you consent to the collection and use of your information as described in this Privacy Policy.
@@ -89,7 +89,7 @@ The Services may contain links to third-party websites and may redirect you to t
 **8. Retention of Your Information**  
 We retain your personal data for as long as reasonably necessary to operate the Services, comply with legal obligations, and resolve disputes. However, blockchain data cannot be deleted due to its decentralized and immutable nature.
 
-If you would like to request that information we have about you be deleted, please contact us at legal@allinbits.com. Please note that certain data stored on public cryptographic blockchains cannot be deleted.
+If you would like to request that information we have about you be deleted, please contact us at <legal{'@'}allinbits.com>. Please note that certain data stored on public cryptographic blockchains cannot be deleted.
 
 **9. Your Choices and Rights**  
 You have the following choices regarding your personal data:  
@@ -117,7 +117,7 @@ We may update this Privacy Policy from time to time. When we update the Policy, 
 
 **14. Contact Information**  
 If you have any questions or concerns about this Privacy Policy, please contact us at:  
-**Email:** legal@allinbits.com  
+**Email:** <legal{'@'}allinbits.com>
 **Address:** All in Bits, Inc.  
 3395 South Jones Blvd. \#153  
 Las Vegas, NV 89146  
