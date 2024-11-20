@@ -12,7 +12,10 @@ const securityLink = "https://github.com/allinbits/security/";
         <router-link to="/" class="text-500 font-termina py-4">{{ $t("homepage.title") }}</router-link>
       </div>
       <div class="flex flex-row items-center justify-center gap-8">
-        <a :href="securityLink" target="_blank" class="hover:text-grey-100 duration-200">{{
+        <router-link active-class="text-light" to="/faq" class="text-300 py-4 hover:text-light text-grey-100">{{
+          $t("homepage.viewFaq")
+        }}</router-link>
+        <a :href="securityLink" target="_blank" class="hover:text-light text-grey-100 duration-200">{{
           $t("homepage.security")
           }}</a>
         <WalletConnect class="hidden md:block" />

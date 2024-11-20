@@ -3,12 +3,14 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/HomeView.vue";
 import TermsView from "@/views/TermsView.vue";
 import PrivacyView from "@/views/PrivacyView.vue";
+import FaqView from "@/views/FaqView.vue";
 
 const routerHistory = createWebHistory();
 const routes = [
   { path: "/", component: HomeView },
   { path: "/terms", component: TermsView },
   { path: "/privacy", component: PrivacyView },
+  { path: "/faq", component: FaqView },
   // { path: "/design", component: DesignView },
 ];
 const router = createRouter({
