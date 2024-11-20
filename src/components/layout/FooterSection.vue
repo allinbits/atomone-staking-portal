@@ -20,8 +20,13 @@ const links = [
           <RouterLink to="/privacy" class="flex items-center hover:text-grey-50">Privacy Policy</RouterLink>
         </div>
         <div class="flex gap-4">
-          <a v-for="(linkData, index) in links" :key="index" class="flex items-center" :href="linkData.url"
-            target="_blank">
+          <a
+            v-for="(linkData, index) in links"
+            :key="index"
+            class="flex items-center"
+            :href="linkData.url"
+            target="_blank"
+          >
             <Icon :icon="linkData.icon" class="hover:text-grey-50 hover:cursor-pointer" />
           </a>
         </div>

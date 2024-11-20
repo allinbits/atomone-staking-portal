@@ -17,7 +17,7 @@ const securityLink = "https://github.com/allinbits/security/";
         }}</router-link>
         <a :href="securityLink" target="_blank" class="hover:text-light text-grey-100 duration-200">{{
           $t("homepage.security")
-          }}</a>
+        }}</a>
         <WalletConnect class="hidden md:block" />
       </div>
     </nav>
