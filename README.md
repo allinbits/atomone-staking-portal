@@ -1,6 +1,6 @@
 # AtomOne Staking Portal
 
-The AtomOne Staking Portal is a platform facilitating web-based management of delegeations on the AtomOne chain. Prioritizing security, AtomOne encourages the use of CLI commands for interactions with the portal, using your wallet of choice or a public address you can gain immediate access to AtomOne's staking functionalities. 
+The AtomOne Staking Portal is a platform facilitating web-based management of tokens (or stake) delegation, re-delegation, un-delegation operations and claiming of rewards on the AtomOne chain. Prioritizing security, AtomOne encourages the use of CLI commands for interactions with the portal, using your wallet of choice or a public address you can gain immediate access to AtomOne's staking functionalities. 
 
 Our goal with the AtomOne Staking Portal is to empower the community to effortlessly participate in staking thus ensuring the security of the network while making it more accessible to engage, regardless of their technical expertise or background.
 
@@ -18,7 +18,7 @@ The list displays the validator moniker, the operator address, the total delegat
 
 The last 3 columns are only available once you have connected your wallet. Either Keplr/Cosmostation or Leap or simply entering your public AtomOne address.
 
-These are your current delegation to that validator, your pending rewards and a list of action buttons: 
+These are your current delegations to that validator, your pending rewards and a list of action buttons: 
 - Stake (to delegate to that validator): Brings up a form to enter the amount you wish to delegate.
 - Redelegate (to redelegate away from that validator): Brings up a form to enter the amount you wish to redelegate and to select the validator you want to redelegate to.
 - Unstake (to undelegate from that validator): Brings up a form to enter the amount you wish to undelegate.
@@ -26,7 +26,7 @@ These are your current delegation to that validator, your pending rewards and a 
   
 At the bottom of the validator list there is also a button to Claim All Rewards across all validators.
 
-All the actiosn above can be completed by either signing with the connected wallet (Keplr/Leap/Cosmostation) or generating a CLI command to build the Tx using the `atomoned` executable and signing securely offline as described in our [How to submit Transactions securely](https://github.com/atomone-hub/atom.one/blob/main/submit-tx-securely.md) guide.
+All the actions above can be completed by either signing with the connected wallet (Keplr/Leap/Cosmostation) or generating a CLI command to build the Tx using the `atomoned` executable and signing securely offline as described in our [How to submit Transactions securely](https://github.com/atomone-hub/atom.one/blob/main/submit-tx-securely.md) guide.
 
 ## Local deployment
 
