@@ -34,8 +34,8 @@ const md = markdownit({
       </div>
     </div>
     <div
-      class="text-grey-100 text-400 lg:w-[800px] font-normal text-left text-pretty after:absolute after:block after:left-0 after:w-full after:bg-grey-300 after:h-px">
-    </div>
+      class="text-grey-100 text-400 lg:w-[800px] font-normal text-left text-pretty after:absolute after:block after:left-0 after:w-full after:bg-grey-300 after:h-px"
+    ></div>
 
     <div class="flex flex-row py-8 md:py-[72px]">
       <p class="text-grey-100 text-400 lg:w-[800px] font-normal text-left text-pretty">

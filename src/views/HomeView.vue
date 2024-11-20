@@ -127,9 +127,7 @@ const getDisplayReward = (validator: string) => {
       return sum + Number(reward.amount);
     }, 0);
   2;
-  return rewards.length == 0
-    ? undefined
-    : (total / Math.pow(10, chainConfig.stakeCurrency.coinDecimals))
+  return rewards.length == 0 ? undefined : total / Math.pow(10, chainConfig.stakeCurrency.coinDecimals);
 };
 </script>
 
@@ -137,7 +135,8 @@ const getDisplayReward = (validator: string) => {
   <div class="flex flex-col w-full pb-[72px]">
     <div v-if="data">
       <div
-        class="grid grid-cols-[minmax(40px,120px)_repeat(7,minmax(40px,auto))] py-4 gap-y-4 gap-x-6 w-full text-grey-100 font-medium text-200 auto-cols-max">
+        class="grid grid-cols-[minmax(40px,120px)_repeat(7,minmax(40px,auto))] py-4 gap-y-4 gap-x-6 w-full text-grey-100 font-medium text-200 auto-cols-max"
+      >
         <span class="font-semibold text-300 text-light">Validator</span>
         <span class="font-semibold text-300 text-light">Address</span>
         <span class="font-semibold text-300 text-light">Delegated Power</span>
@@ -149,34 +148,51 @@ const getDisplayReward = (validator: string) => {
         <template v-for="val in orderedValidators" :key="val.operator_address">
           <span class="text-grey-50 text-100 py-2">{{ val.description.moniker }}</span>
           <span class="text-grey-50 text-100 py-2">{{ shorten(val.operator_address) }}</span>
-          <TokenAmount :amount="val.tokens / Math.pow(10, chainConfig.stakeCurrency.coinDecimals)"
-            :denom="chainConfig.stakeCurrency.coinDenom" class="text-grey-50 text-100 py-2">
+          <TokenAmount
+            :amount="val.tokens / Math.pow(10, chainConfig.stakeCurrency.coinDecimals)"
+            :denom="chainConfig.stakeCurrency.coinDenom"
+            class="text-grey-50 text-100 py-2"
+          >
           </TokenAmount>
           <span class="text-grey-50 text-100 py-2">{{
             val.status == "BOND_STATUS_BONDED" ? "Active" : "Inactive"
           }}</span>
           <span class="text-grey-50 text-100 py-2">{{ val.jailed ? "Yes" : "No" }}</span>
-          <TokenAmount :amount="Number(getDelegationAmount(val.operator_address)) /
-            Math.pow(10, chainConfig.stakeCurrency.coinDecimals)" :denom="chainConfig.stakeCurrency.coinDenom"
-            class="text-grey-50 text-100 py-2" v-if="isDelegating(val.operator_address)">
+          <TokenAmount
+            v-if="isDelegating(val.operator_address)"
+            :amount="
+              Number(getDelegationAmount(val.operator_address)) / Math.pow(10, chainConfig.stakeCurrency.coinDecimals)
+            "
+            :denom="chainConfig.stakeCurrency.coinDenom"
+            class="text-grey-50 text-100 py-2"
+          >
           </TokenAmount>
-          <span class=" text-grey-50 text-100 py-2" v-else>
-            -
-          </span>
-          <TokenAmount :amount="getDisplayReward(val.operator_address)" :denom="chainConfig.stakeCurrency.coinDenom"
-            class="text-grey-50 text-100 py-2">
+          <span v-else class="text-grey-50 text-100 py-2"> - </span>
+          <TokenAmount
+            :amount="getDisplayReward(val.operator_address)"
+            :denom="chainConfig.stakeCurrency.coinDenom"
+            class="text-grey-50 text-100 py-2"
+          >
           </TokenAmount>
           <span class="flex">
             <Delegate v-if="Wallet.loggedIn.value" :validator-address="val.operator_address"></Delegate>
-            <Redelegate v-if="Wallet.loggedIn.value && isDelegating(val.operator_address)"
-              :validator-list="orderedValidators" :validator-address="val.operator_address"
-              :delegation-amount="getDelegationAmount(val.operator_address)">
+            <Redelegate
+              v-if="Wallet.loggedIn.value && isDelegating(val.operator_address)"
+              :validator-list="orderedValidators"
+              :validator-address="val.operator_address"
+              :delegation-amount="getDelegationAmount(val.operator_address)"
+            >
             </Redelegate>
-            <Undelegate v-if="Wallet.loggedIn.value && isDelegating(val.operator_address)"
-              :validator-address="val.operator_address" :delegation-amount="getDelegationAmount(val.operator_address)">
+            <Undelegate
+              v-if="Wallet.loggedIn.value && isDelegating(val.operator_address)"
+              :validator-address="val.operator_address"
+              :delegation-amount="getDelegationAmount(val.operator_address)"
+            >
             </Undelegate>
-            <Claim v-if="Wallet.loggedIn.value && getReward(val.operator_address).length > 0"
-              :validator-address="[val.operator_address]" />
+            <Claim
+              v-if="Wallet.loggedIn.value && getReward(val.operator_address).length > 0"
+              :validator-address="[val.operator_address]"
+            />
           </span>
         </template>
       </div>
