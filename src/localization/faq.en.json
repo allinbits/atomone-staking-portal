@@ -1,15 +1,15 @@
 [
   {
     "question": "What is the AtomOne Staking Portal?",
-    "answer": "The AtomOne Staking Portal is a seamlessly integrated interface empowering secure and efficient delegation interactions with the AtomOne chain."
+    "answer": "The AtomOne Staking Portal is a seamlessly integrated web based interface empowering secure and efficient delegation, re-delegation, un-delegation operations and claiming of rewards on the AtomOne chain."
   },
   {
     "question": "What is the purpose of the AtomOne Staking Portal?",
-    "answer": "The objective of the AtomOne Staking Portal is to ensure that users can easily participate in the delegation process while engaging securely without compromising private keys."
+    "answer": "The objective of the AtomOne Staking Portal is to ensure that users, even non-technical, can easily participate in the delegation process while engaging securely, without compromising private keys. Prioritizing security, AtomOne encourages the use of CLI commands for interactions with the portal, using your wallet of choice or a public address you can gain immediate access to AtomOne's staking functionalities."
   },
   {
     "question": "How does the AtomOne Staking Portal encourage community engagement?",
-    "answer": "The dApp allows users to participate in delegation on AtomOne on an easy to follow interface."
+    "answer": "The AtomOne Staking Portal allows users, regardless of their technical expertise, to participate in delegation on AtomOne on an easy to follow interface."
   },
   {
     "question": "Is the AtomOne token transferable?",
@@ -17,15 +17,15 @@
   },
   {
     "question": "Which wallets support AtomOne Staking Portal?",
-    "answer": "In addition to using the AtomOne CLI (recommended method of signing), users of the AtomOne Staking Portal are also able to delegate, undelegate, redelegate or claim rewards by connecting any of their Keplr, Leap or Cosmostation wallets."
+    "answer": "In addition to using the AtomOne CLI (recommended method of signing), users of the AtomOne Staking Portal are also able to delegate, un-delegate, redelegate or claim rewards by connecting any of their Keplr, Leap or Cosmostation wallets."
   },
   {
     "question": "What is the safest way to interact with the AtomOne Staking Portal?",
-    "answer": "The AtomOne Staking Portal was built so that you are never asked to share a private key, any seed or recovery phrase. Users of the AtomOne Staking Portal are encouraged to follow the best practices for signing and broadcasting transactions by using the AtomOne CLI."
+    "answer": "The AtomOne Staking Portal was built so that you are never asked to share a private key, any seed or recovery phrase. Users of the AtomOne Staking Portal are encouraged to follow the best practices for signing and broadcasting transactions by using the AtomOneGovGen CLI."
   },
   {
     "question": "What types of operations am I able to perform within the AtomOne Staking Portal today?",
-    "answer": "You are currently able to connect your wallet, review validator statistics and delegate tokens to a validator. The dApp also allows you to generate the necessary CLI commands and instructions for air-gapped signing and transmission of those txs when not using a web wallet."
+    "answer": "You are currently able to connect your wallet, review validator statistics and delegate tokens to a validator. The AtomOne Staking Portal also allows you to generate the necessary CLI commands and instructions for air-gapped signing and transmission of those txs when not using a web wallet."
   },
   {
     "question": "What is the future plan for the AtomOne Staking Portal?",
