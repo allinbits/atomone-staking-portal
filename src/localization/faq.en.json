@@ -13,7 +13,7 @@
   },
   {
     "question": "Is the AtomOne token transferable?",
-    "answer": "The AtomOne token is transferable."
+    "answer": "ATONE token is transferrable from one account to another. However, at this moment IBC transfers are not enabled. Once the community agrees to enable IBC transfers, ATONE token would be transferable using IBC. "
   },
   {
     "question": "Which wallets support AtomOne Staking Portal?",
@@ -21,11 +21,11 @@
   },
   {
     "question": "What is the safest way to interact with the AtomOne Staking Portal?",
-    "answer": "The AtomOne Staking Portal was built so that you are never asked to share a private key, any seed or recovery phrase. Users of the AtomOne Staking Portal are encouraged to follow the best practices for signing and broadcasting transactions by using the AtomOneGovGen CLI."
+    "answer": "The AtomOne Staking Portal was built so that you are never asked to share a private key, any seed or recovery phrase. Users of the AtomOne Staking Portal are encouraged to follow the best practices for signing and broadcasting transactions by using the AtomOne CLI."
   },
   {
     "question": "What types of operations am I able to perform within the AtomOne Staking Portal today?",
-    "answer": "You are currently able to connect your wallet, review validator statistics and delegate tokens to a validator. The AtomOne Staking Portal also allows you to generate the necessary CLI commands and instructions for air-gapped signing and transmission of those txs when not using a web wallet."
+    "answer": "You are currently able to connect your wallet, review validator statistics and delegate, un-delegate, redelegate tokens to a validator and claim rewards."
   },
   {
     "question": "What is the future plan for the AtomOne Staking Portal?",
