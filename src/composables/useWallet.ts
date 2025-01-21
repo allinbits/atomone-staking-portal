@@ -11,6 +11,7 @@ export enum Wallets {
   keplr = "Keplr",
   leap = "Leap",
   cosmostation = "Cosmostation",
+  castor = "Castor",
   addressOnly = "AddressOnly",
 }
 
@@ -22,6 +23,8 @@ export const getWalletHelp = (wallet: Wallets) => {
       return "https://leapwallet.notion.site/Leap-Cosmos-Wallet-Support-ba1da3c05d3341eaa44a1850ed3260ee";
     case Wallets.cosmostation:
       return "https://guide.cosmostation.io/web_wallet_en.html";
+    case Wallets.castor:
+      return "https://atom.one"
   }
 };
 const useWalletInstance = () => {
@@ -29,6 +32,7 @@ const useWalletInstance = () => {
     keplr: computed(() => !!window.keplr),
     leap: computed(() => !!window.leap),
     cosmostation: computed(() => !!window.cosmostation),
+    castor: computed(() =>  !!window.nephos),
     loggedIn: ref(false),
     address: ref(""),
     used: ref<Wallets | null>(null),
@@ -73,6 +77,39 @@ const useWalletInstance = () => {
         } finally {
           signal?.removeEventListener("abort", abortHandler);
         }
+        break;
+      case Wallets.castor:
+        try {
+          if (!window.nephos) {
+            throw new Error("Could not connect to Castor"); 
+          }
+
+          const nephos = window.nephos.enable([chainInfo.chainId]);
+          await nephos;
+
+          const offlineSigner = await window.nephos.getOfflineSigner(chainInfo.chainId);
+          const accounts = await offlineSigner.getAccounts();
+          if (!accounts || accounts.length <= 0) {
+            throw new Error("Could not connect to Castor, no accounts found");
+          }
+
+          walletState.address.value = accounts[0].address;
+          walletState.used.value = Wallets.castor;
+          walletState.loggedIn.value = true;
+
+          // @ts-ignore
+          signer.value = offlineSigner;
+
+          if (signal?.aborted) {
+            abortHandler();
+          }
+
+        } catch(e) {
+          throw new Error("Could not connect to Castor: getOfflineSigner method does not exist");
+        } finally {
+          signal?.removeEventListener("abort", abortHandler);
+        }
+
         break;
       case Wallets.leap:
         try {
