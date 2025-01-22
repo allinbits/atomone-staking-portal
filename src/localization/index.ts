@@ -216,7 +216,7 @@ export const messages = {
       },
       Undelegate: {
         cta: "Unstake",
-        undelegated: "You ubstaked",
+        undelegated: "You unstaked",
         error: "Error",
       },
       ProposalVote: {
