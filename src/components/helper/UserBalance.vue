@@ -27,5 +27,5 @@ const balance = computed(() => {
 });
 </script>
 <template>
-  <span>{{ formatAmount(balance.amount, 6) }}</span>
+  <span>{{ formatAmount(balance.amount, chainConfig.stakeCurrency.coinDecimals) }}</span>
 </template>
