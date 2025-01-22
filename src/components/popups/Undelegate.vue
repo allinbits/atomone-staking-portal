@@ -92,7 +92,7 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
   <div class="relative">
     <div>
       <div
-        class="justify-center px-3 py-2 mr-1 rounded bg-light hover:bg-grey-50 text-dark text-100 text-center cursor-pointer"
+        class="justify-center px-3 py-4 rounded-sm bg-grey-200 hover:text-grey-50 text-light font-medium text-100 text-center cursor-pointer"
         @click="() => toggleModal(true)"
       >
         {{ $t("components.Undelegate.cta") }}

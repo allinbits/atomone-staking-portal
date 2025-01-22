@@ -10,6 +10,7 @@ import { useWallet } from "@/composables/useWallet";
 import chainConfig from "@/chain-config.json";
 import { Coin } from "@cosmjs/proto-signing";
 import TokenAmount from "@/components/ui/TokenAmount.vue";
+import Icon from "../components/ui/Icon.vue";
 
 const Wallet = useWallet();
 const queryClient = useQueryClient();
@@ -132,73 +133,88 @@ const getDisplayReward = (validator: string) => {
 </script>
 
 <template>
-  <div class="flex flex-col w-full pb-[72px]">
-    <div v-if="data">
-      <div
-        class="grid grid-cols-[minmax(40px,120px)_repeat(7,minmax(40px,auto))] py-4 gap-y-4 gap-x-6 w-full text-grey-100 font-medium text-200 auto-cols-max"
-      >
-        <span class="font-semibold text-300 text-light">Validator</span>
-        <span class="font-semibold text-300 text-light">Address</span>
-        <span class="font-semibold text-300 text-light">Delegated Power</span>
-        <span class="font-semibold text-300 text-light">Status</span>
-        <span class="font-semibold text-300 text-light">Jailed</span>
-        <span class="font-semibold text-300 text-light">Your stake</span>
-        <span class="font-semibold text-300 text-light">Rewards</span>
-        <span class="font-semibold text-300 text-light">Actions</span>
-        <template v-for="val in orderedValidators" :key="val.operator_address">
-          <span class="text-grey-50 text-100 py-2">{{ val.description.moniker }}</span>
-          <span class="text-grey-50 text-100 py-2">{{ shorten(val.operator_address) }}</span>
-          <TokenAmount
-            :amount="val.tokens / Math.pow(10, chainConfig.stakeCurrency.coinDecimals)"
-            :denom="chainConfig.stakeCurrency.coinDenom"
-            class="text-grey-50 text-100 py-2"
-          >
-          </TokenAmount>
-          <span class="text-grey-50 text-100 py-2">{{
-            val.status == "BOND_STATUS_BONDED" ? "Active" : "Inactive"
-          }}</span>
-          <span class="text-grey-50 text-100 py-2">{{ val.jailed ? "Yes" : "No" }}</span>
-          <TokenAmount
-            v-if="isDelegating(val.operator_address)"
-            :amount="
-              Number(getDelegationAmount(val.operator_address)) / Math.pow(10, chainConfig.stakeCurrency.coinDecimals)
-            "
-            :denom="chainConfig.stakeCurrency.coinDenom"
-            class="text-grey-50 text-100 py-2"
-          >
-          </TokenAmount>
-          <span v-else class="text-grey-50 text-100 py-2"> - </span>
-          <TokenAmount
-            :amount="getDisplayReward(val.operator_address)"
-            :denom="chainConfig.stakeCurrency.coinDenom"
-            class="text-grey-50 text-100 py-2"
-          >
-          </TokenAmount>
-          <span class="flex">
-            <Delegate v-if="Wallet.loggedIn.value" :validator-address="val.operator_address"></Delegate>
-            <Redelegate
-              v-if="Wallet.loggedIn.value && isDelegating(val.operator_address)"
-              :validator-list="orderedValidators"
-              :validator-address="val.operator_address"
-              :delegation-amount="getDelegationAmount(val.operator_address)"
-            >
-            </Redelegate>
-            <Undelegate
-              v-if="Wallet.loggedIn.value && isDelegating(val.operator_address)"
-              :validator-address="val.operator_address"
-              :delegation-amount="getDelegationAmount(val.operator_address)"
-            >
-            </Undelegate>
-            <Claim
-              v-if="Wallet.loggedIn.value && getReward(val.operator_address).length > 0"
-              :validator-address="[val.operator_address]"
-            />
-          </span>
-        </template>
-      </div>
-      <div v-if="userRewards.length > 0">
+  <div class="flex flex-col w-full pb-[72px] gap-4">
+    <div v-if="userRewards.length > 0">
         <Claim :validator-address="userRewards.map((x) => x.validator_address)" />
-      </div>
+    </div>
+    <div v-if="data">
+      <div class="flex flex-col" v-for="(validator, index) in orderedValidators" :key="index">
+        <div class="flex flex-col bg-grey-400 rounded-md mb-4 p-4 flex-wrap gap-4">
+          <div class="flex flex-row justify-between flex-wrap gap-4">
+            <!-- Validator Info -->
+            <div class="flex flex-row gap-4 items-center">
+              <!-- Validator Activity Status -->
+              <div class="w-2 h-full rounded-full" :class="validator.status == 'BOND_STATUS_BONDED' ? [' bg-gradient-900 '] : ['bg-red-400']" />
+              <Icon icon="jailed" :size="2" class="text-grey-50" v-if="validator.jailed" title="Jailed" />
+              <div class="flex flex-col gap-2">
+                <span class="text-grey-50 text-200 font-bold">
+                  {{ validator.description.moniker }}
+                </span>
+                <span class="text-grey-100 text-100 text-wrap break-all">
+                  {{ validator.operator_address }}
+                </span>
+              </div>
+            </div>
+            <!-- Validator Stake -->
+            <div class="flex flex-col gap-2 flex-grow items-start md:items-end">
+              <span class="text-grey-50 text-100 text-left md:text-right">Delegated Power</span>
+              <TokenAmount
+                :amount="validator.tokens / Math.pow(10, chainConfig.stakeCurrency.coinDecimals)"
+                :denom="chainConfig.stakeCurrency.coinDenom"
+                class="text-grey-100 text-100"
+              />
+            </div>
+          </div>
+          <div class="flex flex-col border-t pt-4 border-grey-200" v-if="isDelegating(validator.operator_address)">
+            <!-- Reward Display -->
+            <div class="flex flex-row gap-2">
+              <div class="flex flex-col gap-2 items-center justify-center rounded-sm w-full p-4">
+                <TokenAmount
+                :amount="Number(getDelegationAmount(validator.operator_address)) / Math.pow(10, chainConfig.stakeCurrency.coinDecimals)"
+                :denom="chainConfig.stakeCurrency.coinDenom"
+                class="text-light text-400"
+                />
+                <span class="text-grey-100 text-300">Staked</span>
+              </div>
+              <div class="flex flex-col gap-2 items-center justify-center rounded-sm w-full p-4">
+                <TokenAmount
+                    :amount="getDisplayReward(validator.operator_address)"
+                    :denom="chainConfig.stakeCurrency.coinDenom"
+                    class="text-light text-400"
+                />
+                <span class="text-grey-100 text-300">
+                  Rewards
+                </span>
+              </div>
+            </div>
+            <!-- Actions -->
+            <div class="flex flex-row gap-2 mt-4 flex-wrap w-full">
+                <Delegate 
+                  v-if="Wallet.loggedIn.value" :validator-address="validator.operator_address"
+                  class="flex-grow"
+                />
+                <Redelegate
+                  v-if="Wallet.loggedIn.value && isDelegating(validator.operator_address)"
+                  :validator-list="orderedValidators"
+                  :validator-address="validator.operator_address"
+                  :delegation-amount="getDelegationAmount(validator.operator_address)"
+                  class="flex-grow"
+                />
+                <Undelegate
+                  v-if="Wallet.loggedIn.value && isDelegating(validator.operator_address)"
+                  :validator-address="validator.operator_address"
+                  :delegation-amount="getDelegationAmount(validator.operator_address)"
+                  class="flex-grow"
+                />
+                <Claim
+                  v-if="Wallet.loggedIn.value && getReward(validator.operator_address).length > 0"
+                  :validator-address="[validator.operator_address]"
+                  class="flex-grow"
+                />
+            </div>
+          </div>
+        </div>
+      </div> 
     </div>
   </div>
 </template>
