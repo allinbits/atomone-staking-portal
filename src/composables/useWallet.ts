@@ -215,6 +215,7 @@ const useWalletInstance = () => {
   window.addEventListener("cosmostation_keystorechange", refreshAddress);
   window.addEventListener("keplr_keystorechange", refreshAddress);
   window.addEventListener("leap_keystorechange", refreshAddress);
+  window.addEventListener("castor_keystorechange", refreshAddress);
 
   return { ...walletState, signOut, connect, sendTx };
 };
