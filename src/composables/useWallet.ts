@@ -153,7 +153,7 @@ const useWalletInstance = () => {
       try {
         const client = await SigningStargateClient.connectWithSigner(chainInfo.rpc, signer.value);
         const simulate = await client.simulate(walletState.address.value, msgs, undefined);
-        const gasLimit = simulate && simulate > 0 ? "" + simulate * 1.3 : "500000";
+        const gasLimit = simulate && simulate > 0 ? "" + Math.ceil(simulate * 1.3) : "500000";
         const result = await client.signAndBroadcast(walletState.address.value, msgs, {
           amount: [{ amount: "10000", denom: chainInfo.feeCurrencies[0].coinMinimalDenom }],
           gas: gasLimit,
