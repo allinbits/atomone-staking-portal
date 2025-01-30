@@ -16,7 +16,7 @@ const isAddressOnlyConnection = ref(false);
 
 const publicAddress = ref("");
 
-const { connect, signOut, address, loggedIn, keplr, leap, cosmostation, castor } = useWallet();
+const { connect, signOut, address, loggedIn, keplr, leap, cosmostation } = useWallet();
 
 const connectState = computed(
   () => !isConnecting.value && !isOpen.value && !loggedIn.value && !isError.value && !isAddressOnlyConnection.value,
@@ -170,10 +170,6 @@ bus.on("open", () => {
               <ConnectButton class="my-4" :disabled="!cosmostation" @click="connectWallet(Wallets.cosmostation)">
                 <template #icon> <Icon icon="cosmostation" :size="1.1" class="mr-2 bg-dark p-1 rounded-sm" /> </template
                 >Cosmostation Wallet
-              </ConnectButton>
-              <ConnectButton class="my-4" :disabled="!castor" @click="connectWallet(Wallets.castor)">
-                <template #icon> <Icon icon="link" :size="1.1" class="mr-2 bg-dark p-1 rounded-sm" /> </template
-                >Castor Wallet
               </ConnectButton>
             </div>
           </div>
