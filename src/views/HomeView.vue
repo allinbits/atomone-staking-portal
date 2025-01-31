@@ -5,7 +5,6 @@ import Redelegate from "@/components/popups/Redelegate.vue";
 import Undelegate from "@/components/popups/Undelegate.vue";
 import { useQuery, keepPreviousData, useQueryClient } from "@tanstack/vue-query";
 import { computed, Ref } from "vue";
-import { shorten } from "@/utility";
 import { useWallet } from "@/composables/useWallet";
 import chainConfig from "@/chain-config.json";
 import { Coin } from "@cosmjs/proto-signing";
