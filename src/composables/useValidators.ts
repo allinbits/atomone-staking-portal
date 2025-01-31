@@ -40,7 +40,8 @@ export const useValidators = () => {
         .withChainId(chainInfo.chainId)
         .withFees([{ amount: "5000", denom: chainInfo.feeCurrencies[0].coinMinimalDenom }])
         .withSequence(await fetchSequence())
-        .withSigner(address.value);
+        .withSigner(address.value)
+        .finish();
       return command;
     } else {
       const claims: EncodeObject[] = [];
