@@ -69,7 +69,7 @@ const signRedelegation = async (isCLI = false) => {
     validatorDstAddress: validatorDstAddress.value,
     amount: {
       denom: chainConfig.stakeCurrency.coinMinimalDenom,
-      amount: (redelegationAmount.value * Math.pow(10, delegationDenomDecimals.value))?.toString() ?? "",
+      amount: (BigInt(redelegationAmount.value) * BigInt(10 ** delegationDenomDecimals.value))?.toString() ?? "",
     },
   };
   try {
