@@ -1,5 +1,6 @@
 import { Coin } from "@cosmjs/proto-signing";
 import chainConfig from "../chain-config.json";
+import BigNumber from "bignumber.js";
 
 export function capitalizeFirstLetter(text: string) {
   return text.charAt(0).toUpperCase() + text.slice(1);
@@ -47,8 +48,8 @@ export function totalAmounts(amount: Coin[]): string {
   return total;
 }
 export function formatAmount(amount: string | number | undefined, precision: number) {
-  const n = BigInt(amount ?? 0) / BigInt(10 ** precision);
-  return n.toLocaleString(undefined, { maximumFractionDigits: 6 });
+  const n = BigNumber(amount ?? 0).dividedBy(BigNumber(10 ** precision));
+  return n.toFixed(precision);
 }
 
 export function decToPerc(dec: string | number, prec: number) {
