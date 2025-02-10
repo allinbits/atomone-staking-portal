@@ -60,7 +60,7 @@ const signUndelegation = async (isCLI = false) => {
     validatorAddress: props.validatorAddress,
     amount: {
       denom: chainConfig.stakeCurrency.coinMinimalDenom,
-      amount: (undelegationAmount.value * Math.pow(10, delegationDenomDecimals.value))?.toString() ?? "",
+      amount: (BigInt(undelegationAmount.value) * BigInt(10 ** delegationDenomDecimals.value))?.toString() ?? "",
     },
   };
   try {

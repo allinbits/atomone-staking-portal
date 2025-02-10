@@ -47,7 +47,7 @@ export function totalAmounts(amount: Coin[]): string {
   return total;
 }
 export function formatAmount(amount: string | number | undefined, precision: number) {
-  const n = parseInt(amount?.toString() ?? "0") / 10 ** precision;
+  const n = BigInt(amount ?? 0) / BigInt(10 ** precision);
   return n.toLocaleString(undefined, { maximumFractionDigits: 6 });
 }
 
