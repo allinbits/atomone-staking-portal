@@ -33,6 +33,7 @@ const useWalletInstance = () => {
     address: ref(""),
     used: ref<Wallets | null>(null),
   };
+
   const signOut = () => {
     walletState.address.value = "";
     walletState.used.value = null;

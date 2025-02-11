@@ -163,6 +163,12 @@ const getDisplayReward = (validator: string) => {
                 class="text-grey-100 text-100"
               />
             </div>
+            <div class="flex flex-row items-center justify-center" v-if="!isDelegating(validator.operator_address) && !validator.jailed && validator.status == 'BOND_STATUS_BONDED'">
+              <Delegate 
+                  v-if="Wallet.loggedIn.value" :validator-address="validator.operator_address"
+                  class="flex-grow"
+              />
+            </div>
           </div>
           <div class="flex flex-col border-t pt-4 border-grey-200" v-if="isDelegating(validator.operator_address)">
             <!-- Reward Display -->
