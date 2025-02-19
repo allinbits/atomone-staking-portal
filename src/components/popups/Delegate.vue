@@ -129,7 +129,7 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
                     {{ $t("ui.actions.cli") }}
                   </button>
                   <a
-                    href="https://github.com/atomone-hub/atom.one/blob/main/submit-tx-securely.md"
+                    href="https://github.com/atomone-hub/atom.one/blob/main/content/english/submit-tx-securely.md"
                     target="_blank"
                     class="text-center text-100 text-grey-100 underline"
                   >

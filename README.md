@@ -26,7 +26,7 @@ These are your current delegations to that validator, your pending rewards and a
   
 At the bottom of the validator list there is also a button to Claim All Rewards across all validators.
 
-All the actions above can be completed by either signing with the connected wallet (Keplr/Leap/Cosmostation) or generating a CLI command to build the Tx using the `atomoned` executable and signing securely offline as described in our [How to submit Transactions securely](https://github.com/atomone-hub/atom.one/blob/main/submit-tx-securely.md) guide.
+All the actions above can be completed by either signing with the connected wallet (Keplr/Leap/Cosmostation) or generating a CLI command to build the Tx using the `atomoned` executable and signing securely offline as described in our [How to submit Transactions securely](https://github.com/atomone-hub/atom.one/blob/main/content/english/submit-tx-securely.md) guide.
 
 ## Local deployment
 
