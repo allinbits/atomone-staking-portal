@@ -17,6 +17,7 @@ import { toPlainObjectString } from "@/utility";
 import { DeliverTxResponse } from "@cosmjs/stargate";
 import chainConfig from "@/chain-config.json";
 import { useQueryClient } from "@tanstack/vue-query";
+import BigNumber from "bignumber.js";
 // Get QueryClient from the context
 const queryClient = useQueryClient();
 
@@ -60,7 +61,10 @@ const signUndelegation = async (isCLI = false) => {
     validatorAddress: props.validatorAddress,
     amount: {
       denom: chainConfig.stakeCurrency.coinMinimalDenom,
-      amount: (BigInt(undelegationAmount.value) * BigInt(10 ** delegationDenomDecimals.value))?.toString() ?? "",
+      amount:
+        BigNumber(undelegationAmount.value)
+          .multipliedBy(10 ** delegationDenomDecimals.value)
+          .toFixed(0) ?? "",
     },
   };
   try {

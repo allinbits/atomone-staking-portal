@@ -18,6 +18,7 @@ import { DeliverTxResponse } from "@cosmjs/stargate";
 import chainConfig from "@/chain-config.json";
 import DropDown from "../ui/DropDown.vue";
 import { useQueryClient } from "@tanstack/vue-query";
+import BigNumber from "bignumber.js";
 // Get QueryClient from the context
 const queryClient = useQueryClient();
 
@@ -69,7 +70,10 @@ const signRedelegation = async (isCLI = false) => {
     validatorDstAddress: validatorDstAddress.value,
     amount: {
       denom: chainConfig.stakeCurrency.coinMinimalDenom,
-      amount: (BigInt(redelegationAmount.value) * BigInt(10 ** delegationDenomDecimals.value))?.toString() ?? "",
+      amount:
+        BigNumber(redelegationAmount.value)
+          .multipliedBy(10 ** delegationDenomDecimals.value)
+          .toFixed(0) ?? "",
     },
   };
   try {
