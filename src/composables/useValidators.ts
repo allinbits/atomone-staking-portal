@@ -66,7 +66,7 @@ export const useValidators = () => {
         .withFees([{ amount: "5000", denom: chainInfo.feeCurrencies[0].coinMinimalDenom }])
         .withSequence(await fetchSequence())
         .withSigner(address.value)
-        .addParam(delegation.validatorAddress)
+        .addAddressParam(delegation.validatorAddress)
         .addAmountParam(delegation.amount)
         .finish();
       return command;
@@ -90,8 +90,8 @@ export const useValidators = () => {
         .withFees([{ amount: "5000", denom: chainInfo.feeCurrencies[0].coinMinimalDenom }])
         .withSequence(await fetchSequence())
         .withSigner(address.value)
-        .addParam(redelegation.validatorSrcAddress)
-        .addParam(redelegation.validatorDstAddress)
+        .addAddressParam(redelegation.validatorSrcAddress)
+        .addAddressParam(redelegation.validatorDstAddress)
         .addAmountParam(redelegation.amount)
         .finish();
       return command;
@@ -116,7 +116,7 @@ export const useValidators = () => {
         .withFees([{ amount: "5000", denom: chainInfo.feeCurrencies[0].coinMinimalDenom }])
         .withSequence(await fetchSequence())
         .withSigner(address.value)
-        .addParam(undelegation.validatorAddress)
+        .addAddressParam(undelegation.validatorAddress)
         .addAmountParam(undelegation.amount)
         .finish();
       return command;

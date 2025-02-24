@@ -1,4 +1,5 @@
 import { Coin } from "@atomone/atomone-types/cosmos/base/v1beta1/coin";
+import { bech32 } from "bech32";
 
 export default class CommandBuilder {
   private command: string[];
@@ -21,7 +22,7 @@ export default class CommandBuilder {
   }
   static ClaimRewards(validator: string) {
     const builder = new CommandBuilder("distribution");
-    return builder.withAction("withdraw-rewards").addParam(validator);
+    return builder.withAction("withdraw-rewards").addAddressParam(validator);
   }
   static ClaimAllRewards() {
     const builder = new CommandBuilder("distribution");
@@ -56,6 +57,15 @@ export default class CommandBuilder {
   }
   withFees(fees: Coin[]) {
     this.fees = fees;
+    return this;
+  }
+  addAddressParam(param: string) {
+    try {
+      bech32.decode(param);
+    } catch (_e) {
+      throw new Error("Invalid address");
+    }
+    this.command.push(param);
     return this;
   }
   addParam(param: string) {
