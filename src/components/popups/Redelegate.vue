@@ -13,11 +13,12 @@ import { useWallet, Wallets } from "@/composables/useWallet";
 import { useClipboard } from "@vueuse/core";
 import { useValidators } from "@/composables/useValidators";
 
-import { toPlainObjectString } from "@/utility";
+import { shorten, toPlainObjectString } from "@/utility";
 import { DeliverTxResponse } from "@cosmjs/stargate";
 import chainConfig from "@/chain-config.json";
 import DropDown from "../ui/DropDown.vue";
 import { useQueryClient } from "@tanstack/vue-query";
+import BigNumber from "bignumber.js";
 // Get QueryClient from the context
 const queryClient = useQueryClient();
 
@@ -69,7 +70,10 @@ const signRedelegation = async (isCLI = false) => {
     validatorDstAddress: validatorDstAddress.value,
     amount: {
       denom: chainConfig.stakeCurrency.coinMinimalDenom,
-      amount: (BigInt(redelegationAmount.value) * BigInt(10 ** delegationDenomDecimals.value))?.toString() ?? "",
+      amount:
+        BigNumber(redelegationAmount.value)
+          .multipliedBy(10 ** delegationDenomDecimals.value)
+          .toFixed(0) ?? "",
     },
   };
   try {
@@ -112,7 +116,7 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
 
     <ModalWrap :visible="isOpen" :is-empty="true" @back="isOpen = false">
       <div class="bg-grey-400 w-full rounded-md max-h-screen overflow-auto">
-        <div class="px-10 py-12 bg-grey-400 rounded w-screen max-w-[25rem]">
+        <div class="px-10 py-12 bg-grey-400 rounded w-screen max-w-[40rem]">
           <div v-show="displayState === 'pending'" class="flex flex-col gap-6 relative">
             <span class="text-gradient font-termina text-700 text-center">{{ $t("components.Redelegate.cta") }}</span>
             <div class="flex flex-col gap-10">
@@ -131,7 +135,9 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
                     <div class="w-full flex flex-col ml-1 mt-3">
                       <span>Redelegate to:</span>
                       <DropDown
-                        :values="validatorList.map((x) => x.description.moniker)"
+                        :values="
+                          validatorList.map((x) => x.description.moniker + ' (' + shorten(x.operator_address) + ')')
+                        "
                         :model-value="validatorIndex"
                         @select="handleValChange"
                       />
