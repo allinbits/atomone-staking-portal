@@ -18,7 +18,7 @@ bus.on("error", () => {
 
 <template>
   <div class="relative">
-    <ModalWrap :visible="isOpen" :is-empty="true" @back="isOpen = false">
+    <ModalWrap :visible="isOpen">
       <div id="popup-error-box" class="bg-grey-400 w-full rounded-md max-h-screen overflow-auto">
         <div class="px-10 py-12 bg-grey-400 rounded w-screen max-w-[25rem]">
           <div class="flex flex-col gap-6 relative">

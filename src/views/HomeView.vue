@@ -32,27 +32,39 @@ const { data } = useQuery({
 });
 
 const orderedValidators = computed(() => {
-  if (data) {
-    return data.value.validators.toSorted(
-      (a: { tokens: bigint; status: string }, b: { tokens: bigint; status: string }) => {
-        if (a.status == b.status) {
-          return b.tokens - a.tokens;
-        } else {
-          if (a.status == "BOND_STATUS_BONDED") {
-            return -1;
-          } else {
-            if (a.status == "BOND_STATUS_UNBONDING" && b.status == "BOND_STATUS_UNBONDED") {
-              return -1;
-            } else {
-              return 1;
-            }
-          }
-        }
-      },
-    );
-  } else {
+  if (!data) {
     return [];
   }
+
+  const validatorsSortedByTokens = data.value.validators.toSorted(
+    (a: { tokens: bigint; status: string }, b: { tokens: bigint; status: string }) => {
+      if (a.status == b.status) {
+        return b.tokens - a.tokens;
+      }
+      
+      if (a.status == "BOND_STATUS_BONDED") {
+        return -1;
+      }
+
+      if (a.status == "BOND_STATUS_UNBONDING" && b.status == "BOND_STATUS_UNBONDED") {
+        return -1;
+      }
+        
+      return 1;
+    },
+  );
+
+  const delegatedValidators = [];
+  for (let i = validatorsSortedByTokens.length - 1; i >= 0; i--) {
+      const validator = validatorsSortedByTokens[i];
+      if (isDelegating(validator.operator_address)) {
+        delegatedValidators.unshift(validator);
+        validatorsSortedByTokens.splice(i, 1);
+        continue;
+      }
+  }
+
+  return [...delegatedValidators, ...validatorsSortedByTokens];
 });
 
 const { data: delegations } = useQuery({
