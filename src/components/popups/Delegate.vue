@@ -18,6 +18,7 @@ import { DeliverTxResponse } from "@cosmjs/stargate";
 import chainConfig from "@/chain-config.json";
 import { useQueryClient } from "@tanstack/vue-query";
 import BigNumber from "bignumber.js";
+import UserBalance from "../helper/UserBalance.vue";
 // Get QueryClient from the context
 const queryClient = useQueryClient();
 
@@ -110,6 +111,7 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
             <div class="flex flex-col gap-10">
               <div>
                 <div class="flex flex-col gap-10">
+                  
                   <form class="flex flex-col items-center gap-2">
                     <UiInput
                       v-model="delegationAmount"
@@ -121,6 +123,10 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
                       class="w-full justify-end"
                     />
                   </form>
+                  <div class="flex flex-col w-full items-center justify-center gap-3 text-grey-50">
+                    <span>Available Balance</span>
+                    <UserBalance />
+                  </div>
                 </div>
               </div>
 
