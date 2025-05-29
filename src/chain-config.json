@@ -19,6 +19,11 @@
       "coinDenom": "ATONE",
       "coinMinimalDenom": "uatone",
       "coinDecimals": 6
+    },
+    {
+      "coinDenom": "PHOTON",
+      "coinMinimalDenom": "uphoton",
+      "coinDecimals": 6
     }
   ],
   "stakeCurrency": {
@@ -30,6 +35,11 @@
     {
       "coinDenom": "ATONE",
       "coinMinimalDenom": "uatone",
+      "coinDecimals": 6
+    },
+    {
+      "coinDenom": "PHOTON",
+      "coinMinimalDenom": "uphoton",
       "coinDecimals": 6
     }
   ]

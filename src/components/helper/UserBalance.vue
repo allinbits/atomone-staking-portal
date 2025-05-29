@@ -6,6 +6,7 @@ import { useWallet } from "@/composables/useWallet";
 import { formatAmount } from "@/utility";
 
 const Wallet = useWallet();
+const { denom } = defineProps<{ denom: string }>();
 
 const balancesFetcher = (address: Ref<string>) =>
   fetch(`${chainConfig.rest}cosmos/bank/v1beta1/balances/${address.value}?pagination.limit=1000`).then((response) =>
@@ -18,14 +19,16 @@ const { data: balances } = useQuery({
 });
 const balance = computed(() => {
   if (balances && balances.value) {
-    return balances.value.balances.filter(
-      (x: { denom: string }) => x.denom == chainConfig.stakeCurrency.coinMinimalDenom,
-    )[0];
+    return (
+      balances.value.balances.filter((x: { denom: string }) => x.denom == denom)[0] ?? { amount: "0", denom: denom }
+    );
   } else {
-    return { amount: "0", denom: chainConfig.stakeCurrency.coinMinimalDenom };
+    return { amount: "0", denom: denom };
   }
 });
 </script>
 <template>
-  <span>{{ formatAmount(balance.amount, chainConfig.stakeCurrency.coinDecimals) }}</span>
+  <span v-if="balance">{{
+    formatAmount(balance.amount, chainConfig.currencies.find((x) => x.coinMinimalDenom == denom)?.coinDecimals ?? 6)
+  }}</span>
 </template>

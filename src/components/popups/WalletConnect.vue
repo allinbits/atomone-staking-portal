@@ -7,6 +7,7 @@ import { shorten } from "@/utility";
 import { bus } from "@/bus";
 import UserBalance from "@/components//helper/UserBalance.vue";
 import { bech32 } from "bech32";
+import { useQuery } from "@tanstack/vue-query";
 
 const isOpen = ref(false);
 const isConnecting = ref(false);
@@ -17,6 +18,28 @@ const isAddressOnlyConnection = ref(false);
 const publicAddress = ref("");
 
 const { connect, signOut, address, loggedIn, keplr, leap, cosmostation } = useWallet();
+
+const balancesFetcher = (addr: Ref<string>) =>
+  fetch(`${chainConfig.rest}cosmos/bank/v1beta1/balances/${addr.value}?pagination.limit=1000`).then((response) =>
+    response.json(),
+  );
+const { data: balances } = useQuery({
+  queryKey: ["balances"],
+  queryFn: () => balancesFetcher(address),
+  enabled: loggedIn,
+});
+const balance = computed(() => {
+  if (balances && balances.value) {
+    return (
+      balances.value.balances.filter((x: { denom: string }) => x.denom == "uphoton")[0] ?? {
+        amount: "0",
+        denom: "uphoton",
+      }
+    );
+  } else {
+    return { amount: "0", denom: "uphoton" };
+  }
+});
 
 const connectState = computed(
   () => !isConnecting.value && !isOpen.value && !loggedIn.value && !isError.value && !isAddressOnlyConnection.value,
@@ -231,7 +254,8 @@ bus.on("open", () => {
             <div class="text-light text-200">{{ shorten(address) }}</div>
 
             <div class="text-100 text-grey-100">
-              <UserBalance :address="address" /> {{ chainConfig.stakeCurrency.coinDenom }}
+              <UserBalance :denom="chainConfig.stakeCurrency.coinMinimalDenom" />
+              {{ chainConfig.stakeCurrency.coinDenom }}
             </div>
           </div>
         </div>
@@ -250,7 +274,15 @@ bus.on("open", () => {
             </div>
             <div class="text-200 text-grey-100 pt-6 pb-2">{{ $t("components.WalletConnect.balance") }}</div>
             <div class="text-300 text-light">
-              <UserBalance :address="address" /> {{ chainConfig.stakeCurrency.coinDenom }}
+              <UserBalance :denom="chainConfig.stakeCurrency.coinMinimalDenom" />
+              {{ chainConfig.stakeCurrency.coinDenom }}
+              <br />
+              <UserBalance :denom="'uphoton'" /> PHOTON
+            </div>
+            <div v-if="balance && balance.amount == '0'" class="rounded-sm text-100 text-grey-100 bg-grey-400 p-3 mt-2">
+              <a href="https://atom.one/#photon" target="_blank" rel="noopener">{{
+                $t("components.WalletConnect.noPhoton")
+              }}</a>
             </div>
             <div class="buttons">
               <ConnectButton
