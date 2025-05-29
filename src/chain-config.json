@@ -33,6 +33,11 @@
   },
   "feeCurrencies": [
     {
+      "coinDenom": "ATONE",
+      "coinMinimalDenom": "uatone",
+      "coinDecimals": 6
+    },
+    {
       "coinDenom": "PHOTON",
       "coinMinimalDenom": "uphoton",
       "coinDecimals": 6
