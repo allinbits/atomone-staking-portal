@@ -37,8 +37,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, defineAsyncComponent } from "vue";
 import resolveConfig from "tailwindcss/resolveConfig";
+import { computed, defineAsyncComponent, ref } from "vue";
+
 import tailwindConfig from "@/../tailwind.config";
 
 interface Props {
@@ -50,18 +51,21 @@ interface Props {
   gradientTo?: string;
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  container: "",
-  size: 1,
-  gradient: false,
-  gradientFrom: undefined,
-  gradientTo: undefined,
-});
+const props = withDefaults(
+  defineProps<Props>(),
+  {
+    container: "",
+    size: 1,
+    gradient: false,
+    gradientFrom: undefined,
+    gradientTo: undefined
+  }
+);
 
 const id = ref("");
 const idUrl = ref("");
 
-if (props.gradient || (props.gradientFrom && props.gradientTo)) {
+if (props.gradient || props.gradientFrom && props.gradientTo) {
   id.value = crypto.randomUUID();
   idUrl.value = `url(#${id.value})`;
 }

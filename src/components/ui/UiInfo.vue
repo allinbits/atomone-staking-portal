@@ -10,22 +10,29 @@ interface Props {
   circled?: boolean;
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  type: "success",
-  icon: undefined,
-  circled: false,
-});
+const props = withDefaults(
+  defineProps<Props>(),
+  {
+    type: "success",
+    icon: undefined,
+    circled: false
+  }
+);
 
 const defaultIcons = {
   info: "warning",
   warning: "warning",
   danger: "danger",
   success: "check",
-  content: "warning",
+  content: "warning"
 } as const;
 
 const infoType = [props.type === "success" && "bg-gradient text-dark"];
-const ico = computed<string>(() => (props.icon !== undefined ? props.icon : defaultIcons[props.type]));
+const ico = computed<string>(() => {
+  return props.icon !== undefined
+    ? props.icon
+    : defaultIcons[props.type];
+});
 const isCircled = computed<boolean>(() => props.circled || props.type === "success");
 </script>
 

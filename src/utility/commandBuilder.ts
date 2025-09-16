@@ -3,33 +3,41 @@ import { bech32 } from "bech32";
 
 export default class CommandBuilder {
   private command: string[];
+
   private address: string;
+
   private fees: Coin[];
+
   private chainId: string;
+
   private sequence: number;
 
-  static Delegate() {
+  static Delegate () {
     const builder = new CommandBuilder("staking");
     return builder.withAction("delegate");
   }
-  static Redelegate() {
+
+  static Redelegate () {
     const builder = new CommandBuilder("staking");
     return builder.withAction("redelegate");
   }
-  static Undelegate() {
+
+  static Undelegate () {
     const builder = new CommandBuilder("staking");
     return builder.withAction("unbond");
   }
-  static ClaimRewards(validator: string) {
+
+  static ClaimRewards (validator: string) {
     const builder = new CommandBuilder("distribution");
     return builder.withAction("withdraw-rewards").addAddressParam(validator);
   }
-  static ClaimAllRewards() {
+
+  static ClaimAllRewards () {
     const builder = new CommandBuilder("distribution");
     return builder.withAction("withdraw-all-rewards");
   }
 
-  constructor(module: string) {
+  constructor (module: string) {
     this.command = [];
     this.address = "";
     this.fees = [];
@@ -39,27 +47,33 @@ export default class CommandBuilder {
     this.command.push("tx");
     this.command.push(module);
   }
-  withAction(action: string) {
+
+  withAction (action: string) {
     this.command.push(action);
     return this;
   }
-  withChainId(chainId: string) {
+
+  withChainId (chainId: string) {
     this.chainId = chainId;
     return this;
   }
-  withSequence(sequence: number) {
+
+  withSequence (sequence: number) {
     this.sequence = sequence;
     return this;
   }
-  withSigner(address: string) {
+
+  withSigner (address: string) {
     this.address = address;
     return this;
   }
-  withFees(fees: Coin[]) {
+
+  withFees (fees: Coin[]) {
     this.fees = fees;
     return this;
   }
-  addAddressParam(param: string) {
+
+  addAddressParam (param: string) {
     try {
       bech32.decode(param);
     } catch (_e) {
@@ -68,15 +82,18 @@ export default class CommandBuilder {
     this.command.push(param);
     return this;
   }
-  addParam(param: string) {
+
+  addParam (param: string) {
     this.command.push(param);
     return this;
   }
-  addAmountParam(amount: Coin) {
+
+  addAmountParam (amount: Coin) {
     this.command.push(amount.amount + amount.denom);
     return this;
   }
-  finish() {
+
+  finish () {
     this.command.push("--fees");
     let feeString = "";
     for (let i = 0; i < this.fees.length; i++) {

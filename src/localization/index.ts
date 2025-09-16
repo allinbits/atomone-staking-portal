@@ -1,6 +1,6 @@
+import faqEn from "./faq.en.json";
 import privacyEn from "./privacy.en";
 import termsEn from "./terms.en";
-import faqEn from "./faq.en.json";
 
 export const messages = {
   en: {
@@ -19,19 +19,19 @@ export const messages = {
       viewAuditStatus: "View Audit Status",
       security: "Security",
       auditStatus:
-        "Your security is our priority! Click below to view this application's latest audit status and see how we’re working to keep you safe. We encourage you to check the audit status regularly before using the application to ensure you’re always up-to-date on our security measures.",
+        "Your security is our priority! Click below to view this application's latest audit status and see how we’re working to keep you safe. We encourage you to check the audit status regularly before using the application to ensure you’re always up-to-date on our security measures."
     },
     termspage: {
       title: "Terms of Service",
-      content: termsEn,
+      content: termsEn
     },
     faqPage: {
       title: "FAQ",
-      content: faqEn,
+      content: faqEn
     },
     privacypage: {
       title: "Privacy Policy",
-      content: privacyEn,
+      content: privacyEn
     },
     voteHistory: {
       title: "Voting History",
@@ -47,8 +47,8 @@ export const messages = {
         voted: "Voted",
         deposited: "Deposited",
         stake: "Vote Stake",
-        voteTime: "Voted/Overridden",
-      },
+        voteTime: "Voted/Overridden"
+      }
     },
     voteOptions: {
       yes: "Yes",
@@ -59,7 +59,7 @@ export const messages = {
       VOTE_OPTION_YES: "Yes",
       VOTE_OPTION_NO: "No",
       VOTE_OPTION_ABSTAIN: "Abstain",
-      VOTE_OPTION_NO_WITH_VETO: "No With Veto",
+      VOTE_OPTION_NO_WITH_VETO: "No With Veto"
     },
     propType: (ctx: string): string => {
       switch (ctx) {
@@ -79,7 +79,7 @@ export const messages = {
       PROPOSAL_STATUS_VOTING_PERIOD: "Ends in {days} days",
       PROPOSAL_STATUS_FAILED: "Failed",
       PROPOSAL_STATUS_INVALID: "Invalid",
-      PROPOSAL_STATUS_UNSPECIFIED: "Unspecified",
+      PROPOSAL_STATUS_UNSPECIFIED: "Unspecified"
     },
     proposalcreate: {
       transaction: "Transaction",
@@ -100,7 +100,7 @@ export const messages = {
       proposalTypeUpgrade: "Upgrade Proposal",
       proposalTypeText: "Text Proposal",
       proposalCTA: "Create",
-      proposalWallet: "Connect Wallet",
+      proposalWallet: "Connect Wallet"
     },
     proposalpage: {
       badges: {
@@ -110,7 +110,7 @@ export const messages = {
         depositPending: "Deposit not reached",
         depositFailed: "Deposit not met",
         passed: "Passed",
-        rejected: "Rejected",
+        rejected: "Rejected"
       },
       labels: {
         turnOut: "Turnout",
@@ -136,12 +136,12 @@ export const messages = {
         validators: "Validators",
         validatorsVoted: "Validators Voted",
         accountsAll: "All Voters",
-        accountsVoted: "Accounts Voted",
+        accountsVoted: "Accounts Voted"
       },
       types: {
         text: "Text proposal",
         paramChange: "Parameter change proposal",
-        upgrade: "Software upgrade proposal",
+        upgrade: "Software upgrade proposal"
       },
       results: {
         passed: "Passed",
@@ -149,19 +149,19 @@ export const messages = {
         rejected: "Rejected",
         willPass: "Will pass",
         willReject: "Will be rejected",
-        willFail: "Will fail",
-      },
+        willFail: "Will fail"
+      }
     },
     proposalview: {
       labels: {
-        unavailable: "Proposal is unavailable",
-      },
+        unavailable: "Proposal is unavailable"
+      }
     },
     components: {
       ErrorBox: {
         title: "Error",
         message: "Something went wrong...",
-        cta: "Please refresh",
+        cta: "Please refresh"
       },
       WalletConnect: {
         button: "Connect Wallet",
@@ -183,7 +183,7 @@ export const messages = {
         enterAddress: "Enter your AtomOne wallet address",
         addressPlaceholder: "e.g. atone1ad453f23bc2d...",
         noPhoton:
-          "You currently have 0 PHOTON. Soon you will only be able to pay with TXs with PHOTON. Click here to learn more and find out how to mint PHOTON.",
+          "You currently have 0 PHOTON. Soon you will only be able to pay with TXs with PHOTON. Click here to learn more and find out how to mint PHOTON."
       },
       Breakdown: {
         moniker: "Moniker",
@@ -192,51 +192,51 @@ export const messages = {
         txHash: "TX Hash",
         weight: "Weight",
         time: "Time",
-        hasNotVoted: "HAS NOT VOTED",
+        hasNotVoted: "HAS NOT VOTED"
       },
       FooterSection: {
-        cta: "Be a part of the conversation",
+        cta: "Be a part of the conversation"
       },
       Search: {
-        placeholder: "Search Proposal",
+        placeholder: "Search Proposal"
       },
       Delegate: {
         cta: "Stake",
         delegated: "You staked",
-        error: "Error",
+        error: "Error"
       },
       Claim: {
         cta: "Claim Rewards",
         ctamulti: "Claim All Rewards",
         claimed: "Claimed Rewards",
-        error: "Error",
+        error: "Error"
       },
       Redelegate: {
         cta: "Redelegate",
         redelegated: "You redelegated",
-        error: "Error",
+        error: "Error"
       },
       Undelegate: {
         cta: "Unstake",
         undelegated: "You unstaked",
-        error: "Error",
+        error: "Error"
       },
       ProposalVote: {
         cta: "Vote",
         voted: "You voted",
         error: "Error",
-        weightedInstructions: "Define weight for each of the voting options. The sum of weights must be equal to 1.",
+        weightedInstructions: "Define weight for each of the voting options. The sum of weights must be equal to 1."
       },
       ProposalDeposit: {
         cta: "Deposit",
         act: "deposited",
         deposited: "You deposited",
         error: "Error",
-        instructions: "Enter deposit amount",
+        instructions: "Enter deposit amount"
       },
       VotePanel: {
         breakdown: "Breakdown",
-        noVotes: "No votes have been recorded.",
+        noVotes: "No votes have been recorded."
       },
       GithubComments: {
         signInLong: "Sign in via GitHub to be able to post messages",
@@ -246,7 +246,7 @@ export const messages = {
         upvoteRatio: "Upvote Ratio",
         totalComments: "Total Comment(s)",
         viewOnGithub: "View on GitHub",
-        postComment: "Post Comment",
+        postComment: "Post Comment"
       },
       GithubLinks: {
         communityLinks: "Community Links",
@@ -259,8 +259,8 @@ export const messages = {
         invalidHttpsLink: "Link is not valid, must be HTTPS",
         invalidLinkContentLength: "Content length must be at least 32 characters",
         cancel: "Cancel",
-        post: "Post",
-      },
+        post: "Post"
+      }
     },
     ui: {
       readMore: "Read More",
@@ -274,10 +274,10 @@ export const messages = {
         copied: "Copied",
         copy: "Copy",
         back: "Back",
-        done: "Done",
+        done: "Done"
       },
       buttons: {
-        back: "Back",
+        back: "Back"
       },
       tabs: {
         Info: "Info",
@@ -288,8 +288,8 @@ export const messages = {
         Yes: "Yes",
         No: "No",
         Veto: "Veto",
-        Abstain: "Abstain",
-      },
-    },
-  },
+        Abstain: "Abstain"
+      }
+    }
+  }
 };

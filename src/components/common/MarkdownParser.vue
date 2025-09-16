@@ -1,32 +1,35 @@
 <script lang="ts" setup>
-import { onMounted, ref, computed } from "vue";
-import markdownit from "markdown-it";
 import MarkdownItMermaid from "@agoose77/markdown-it-mermaid";
+import markdownit from "markdown-it";
 import { alertPlugin } from "markdown-it-github-alert";
+import { computed, onMounted, ref } from "vue";
 
-import * as Utility from "@/utility/index";
 import { bus } from "@/bus";
+import * as Utility from "@/utility/index";
 
 const md = markdownit({
   html: true,
   linkify: true,
-  typographer: true,
-})
-  .use(MarkdownItMermaid)
-  .use(alertPlugin);
+  typographer: true
+}).
+  use(MarkdownItMermaid).
+  use(alertPlugin);
 
 const props = defineProps<{ limit?: number }>();
 const content = defineModel<string>();
 const trimmedContent = ref<string>("");
 
-async function parseData() {
+async function parseData () {
   try {
     if (!content.value) {
       return "";
     }
 
     const htmlContent = props.limit
-      ? await md.render(content.value.slice(0, props.limit))
+      ? await md.render(content.value.slice(
+        0,
+        props.limit
+      ))
       : await md.render(content.value);
 
     trimmedContent.value = Utility.purifyHtml(htmlContent);
@@ -64,7 +67,7 @@ const getClasses = computed(() => {
     "prose-td:border",
     "prose-th:text-center",
     "prose-th:text-light",
-    "prose-th:border",
+    "prose-th:border"
   ];
 });
 

@@ -35,6 +35,7 @@
 
 <script lang="ts" setup>
 import { computed } from "vue";
+
 import Icon from "@/components/ui/Icon.vue";
 
 interface Props {
@@ -43,20 +44,26 @@ interface Props {
   value?: number | string;
   label?: string;
 }
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: false,
-  value: undefined,
-  label: "",
-});
+const props = withDefaults(
+  defineProps<Props>(),
+  {
+    modelValue: false,
+    value: undefined,
+    label: ""
+  }
+);
 
 if (props.type === "radio" && !props.value) {
-  throw new Error('Radio type needs "value" prop to be set');
+  throw new Error("Radio type needs \"value\" prop to be set");
 }
 const emit = defineEmits(["update:modelValue"]);
 const model = computed({
   get: () => props.modelValue,
   set: (value) => {
-    emit("update:modelValue", value);
-  },
+    emit(
+      "update:modelValue",
+      value
+    );
+  }
 });
 </script>

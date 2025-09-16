@@ -42,38 +42,56 @@ interface Props {
   min?: number;
   max?: number;
 }
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: "",
-  type: "text",
-  variant: "col",
-  label: "",
-  placeholder: "",
-  isError: false,
-  errorMessage: "Input Error",
-  min: 0,
-  max: 1,
-  icon: null,
-});
+const props = withDefaults(
+  defineProps<Props>(),
+  {
+    modelValue: "",
+    type: "text",
+    variant: "col",
+    label: "",
+    placeholder: "",
+    isError: false,
+    errorMessage: "Input Error",
+    min: 0,
+    max: 1,
+    icon: null
+  }
+);
 
 const focused = ref(false);
 
-const MinValue = (val: number) => Math.min(props.max, val);
-const MaxValue = (val: number) => Math.max(props.min, val);
+const MinValue = (val: number) => Math.min(
+  props.max,
+  val
+);
+const MaxValue = (val: number) => Math.max(
+  props.min,
+  val
+);
 
-const emit = defineEmits(["update:modelValue", "focus"]);
+const emit = defineEmits([
+  "update:modelValue",
+  "focus"
+]);
 const model = computed({
   get: () => props.modelValue,
   set: (value) => {
-    emit("update:modelValue", value);
-  },
+    emit(
+      "update:modelValue",
+      value
+    );
+  }
 });
 
 const focusHandler = (isFocused: boolean) => {
-  emit("focus", isFocused);
+  emit(
+    "focus",
+    isFocused
+  );
   focused.value = isFocused;
 };
 
-//TODO: error system
+// TODO: error system
 </script>
 
 <style scoped>

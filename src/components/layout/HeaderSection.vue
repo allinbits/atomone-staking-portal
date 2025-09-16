@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import AuditStatus from "@/components/warnings/AuditStatus.vue";
 import WalletConnect from "@/components/popups/WalletConnect.vue";
+import AuditStatus from "@/components/warnings/AuditStatus.vue";
 
 const securityLink = "https://github.com/allinbits/security/";
 </script>

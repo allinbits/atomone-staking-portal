@@ -1,34 +1,27 @@
 <script setup lang="ts">
+import { Coin } from "@cosmjs/proto-signing";
+import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/vue-query";
+import { computed, Ref } from "vue";
+
+import chainConfig from "@/chain-config.json";
 import Claim from "@/components/popups/Claim.vue";
 import Delegate from "@/components/popups/Delegate.vue";
 import Redelegate from "@/components/popups/Redelegate.vue";
 import Undelegate from "@/components/popups/Undelegate.vue";
-import { useQuery, keepPreviousData, useQueryClient } from "@tanstack/vue-query";
-import { computed, Ref } from "vue";
-import { useWallet } from "@/composables/useWallet";
-import chainConfig from "@/chain-config.json";
-import { Coin } from "@cosmjs/proto-signing";
 import TokenAmount from "@/components/ui/TokenAmount.vue";
+import { useWallet } from "@/composables/useWallet";
+
 import Icon from "../components/ui/Icon.vue";
 
 const Wallet = useWallet();
 const queryClient = useQueryClient();
-const fetcher = () =>
-  fetch(chainConfig.rest + "cosmos/staking/v1beta1/validators?pagination.limit=1000").then((response) =>
-    response.json(),
-  );
-const delegationsFetcher = (address: Ref<string>) =>
-  fetch(`${chainConfig.rest}cosmos/staking/v1beta1/delegations/${address.value}?pagination.limit=1000`).then(
-    (response) => response.json(),
-  );
-const rewardsFetcher = (address: Ref<string>) =>
-  fetch(
-    `${chainConfig.rest}cosmos/distribution/v1beta1/delegators/${address.value}/rewards?pagination.limit=1000`,
-  ).then((response) => response.json());
+const fetcher = () => fetch(chainConfig.rest + "cosmos/staking/v1beta1/validators?pagination.limit=1000").then((response) => response.json());
+const delegationsFetcher = (address: Ref<string>) => fetch(`${chainConfig.rest}cosmos/staking/v1beta1/delegations/${address.value}?pagination.limit=1000`).then((response) => response.json());
+const rewardsFetcher = (address: Ref<string>) => fetch(`${chainConfig.rest}cosmos/distribution/v1beta1/delegators/${address.value}/rewards?pagination.limit=1000`).then((response) => response.json());
 const { data } = useQuery({
   queryKey: ["validators"],
   queryFn: () => fetcher(),
-  placeholderData: keepPreviousData,
+  placeholderData: keepPreviousData
 });
 
 const orderedValidators = computed(() => {
@@ -36,63 +29,76 @@ const orderedValidators = computed(() => {
     return [];
   }
 
-  const validatorsSortedByTokens = data.value.validators.toSorted(
-    (a: { tokens: bigint; status: string }, b: { tokens: bigint; status: string }) => {
-      if (a.status == b.status) {
-        return b.tokens - a.tokens;
-      }
+  const validatorsSortedByTokens = data.value.validators.toSorted((a: { tokens: bigint;
+    status: string; }, b: { tokens: bigint;
+    status: string; }) => {
+    if (a.status == b.status) {
+      return b.tokens - a.tokens;
+    }
 
-      if (a.status == "BOND_STATUS_BONDED") {
-        return -1;
-      }
+    if (a.status == "BOND_STATUS_BONDED") {
+      return -1;
+    }
 
-      if (a.status == "BOND_STATUS_UNBONDING" && b.status == "BOND_STATUS_UNBONDED") {
-        return -1;
-      }
+    if (a.status == "BOND_STATUS_UNBONDING" && b.status == "BOND_STATUS_UNBONDED") {
+      return -1;
+    }
 
-      return 1;
-    },
-  );
+    return 1;
+  });
 
   const delegatedValidators = [];
   for (let i = validatorsSortedByTokens.length - 1; i >= 0; i--) {
     const validator = validatorsSortedByTokens[i];
     if (isDelegating(validator.operator_address)) {
       delegatedValidators.unshift(validator);
-      validatorsSortedByTokens.splice(i, 1);
+      validatorsSortedByTokens.splice(
+        i,
+        1
+      );
       continue;
     }
   }
 
-  return [...delegatedValidators, ...validatorsSortedByTokens];
+  return [
+    ...delegatedValidators,
+    ...validatorsSortedByTokens
+  ];
 });
 
 const { data: delegations } = useQuery({
   queryKey: ["delegations"],
   queryFn: () => delegationsFetcher(Wallet.address),
-  enabled: Wallet.loggedIn,
+  enabled: Wallet.loggedIn
 });
 const { data: rewards } = useQuery({
   queryKey: ["rewards"],
   queryFn: () => rewardsFetcher(Wallet.address),
-  enabled: Wallet.loggedIn,
+  enabled: Wallet.loggedIn
 });
 const userDelegations = computed(() => {
   if (delegations.value) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return delegations.value.delegation_responses as any[];
   } else {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return [] as any[];
   }
 });
-setInterval(() => {
-  queryClient.invalidateQueries({ queryKey: ["rewards"] });
-  queryClient.invalidateQueries({ queryKey: ["delegations"] });
-  queryClient.invalidateQueries({ queryKey: ["validators"] });
-}, 30000);
+setInterval(
+  () => {
+    queryClient.invalidateQueries({ queryKey: ["rewards"] });
+    queryClient.invalidateQueries({ queryKey: ["delegations"] });
+    queryClient.invalidateQueries({ queryKey: ["validators"] });
+  },
+  30000
+);
 const userRewards = computed(() => {
   if (rewards.value) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return rewards.value.rewards as any[];
   } else {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return [] as any[];
   }
 });
@@ -130,16 +136,21 @@ const getDelegationAmount = (addr: string) => {
   }
 };
 const getDisplayReward = (validator: string) => {
-  const rewards = getReward(validator).filter(
-    (x: { denom: string }) => x.denom == chainConfig.stakeCurrency.coinMinimalDenom,
-  );
+  const rewards = getReward(validator).filter((x: { denom: string }) => x.denom == chainConfig.stakeCurrency.coinMinimalDenom);
   const total =
     0 +
-    rewards.reduce((sum: number, reward: Coin) => {
-      return sum + Number(reward.amount);
-    }, 0);
-  2;
-  return rewards.length == 0 ? undefined : total / Math.pow(10, chainConfig.stakeCurrency.coinDecimals);
+    rewards.reduce(
+      (sum: number, reward: Coin) => {
+        return sum + Number(reward.amount);
+      },
+      0
+    );
+  return rewards.length == 0
+    ? undefined
+    : total / Math.pow(
+      10,
+      chainConfig.stakeCurrency.coinDecimals
+    );
 };
 </script>
 

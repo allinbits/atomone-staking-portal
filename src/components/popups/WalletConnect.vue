@@ -1,13 +1,14 @@
 <script lang="ts" setup>
-import chainConfig from "@/chain-config.json";
-import { Wallets, useWallet, getWalletHelp } from "@/composables/useWallet";
-import ConnectButton from "@/components/ui/ConnectButton.vue";
-import { Ref, computed, ref } from "vue";
-import { shorten } from "@/utility";
-import { bus } from "@/bus";
-import UserBalance from "@/components//helper/UserBalance.vue";
-import { bech32 } from "bech32";
 import { useQuery } from "@tanstack/vue-query";
+import { bech32 } from "bech32";
+import { computed, Ref, ref } from "vue";
+
+import { bus } from "@/bus";
+import chainConfig from "@/chain-config.json";
+import UserBalance from "@/components//helper/UserBalance.vue";
+import ConnectButton from "@/components/ui/ConnectButton.vue";
+import { getWalletHelp, useWallet, Wallets } from "@/composables/useWallet";
+import { shorten } from "@/utility";
 
 const isOpen = ref(false);
 const isConnecting = ref(false);
@@ -19,37 +20,29 @@ const publicAddress = ref("");
 
 const { connect, signOut, address, loggedIn, keplr, leap, cosmostation } = useWallet();
 
-const balancesFetcher = (addr: Ref<string>) =>
-  fetch(`${chainConfig.rest}cosmos/bank/v1beta1/balances/${addr.value}?pagination.limit=1000`).then((response) =>
-    response.json(),
-  );
+const balancesFetcher = (addr: Ref<string>) => fetch(`${chainConfig.rest}cosmos/bank/v1beta1/balances/${addr.value}?pagination.limit=1000`).then((response) => response.json());
 const { data: balances } = useQuery({
   queryKey: ["balances"],
   queryFn: () => balancesFetcher(address),
-  enabled: loggedIn,
+  enabled: loggedIn
 });
 const balance = computed(() => {
   if (balances && balances.value) {
     return (
       balances.value.balances.filter((x: { denom: string }) => x.denom == "uphoton")[0] ?? {
         amount: "0",
-        denom: "uphoton",
+        denom: "uphoton"
       }
     );
   } else {
-    return { amount: "0", denom: "uphoton" };
+    return { amount: "0",
+      denom: "uphoton" };
   }
 });
 
-const connectState = computed(
-  () => !isConnecting.value && !isOpen.value && !loggedIn.value && !isError.value && !isAddressOnlyConnection.value,
-);
-const selectState = computed(
-  () => !isConnecting.value && isOpen.value && !loggedIn.value && !isError.value && !isAddressOnlyConnection.value,
-);
-const addressState = computed(
-  () => !isConnecting.value && isOpen.value && !loggedIn.value && !isError.value && isAddressOnlyConnection.value,
-);
+const connectState = computed(() => !isConnecting.value && !isOpen.value && !loggedIn.value && !isError.value && !isAddressOnlyConnection.value);
+const selectState = computed(() => !isConnecting.value && isOpen.value && !loggedIn.value && !isError.value && !isAddressOnlyConnection.value);
+const addressState = computed(() => !isConnecting.value && isOpen.value && !loggedIn.value && !isError.value && isAddressOnlyConnection.value);
 const connectingState = computed(() => isConnecting.value && isOpen.value && !loggedIn.value && !isError.value);
 const connectedState = computed(() => !isConnecting.value && !isOpen.value && loggedIn.value && !isError.value);
 const viewState = computed(() => !isConnecting.value && isOpen.value && loggedIn.value && !isError.value);
@@ -66,12 +59,16 @@ const connectWallet = async (walletType: Wallets, address?: string) => {
 
   if (window.keplr) {
     window.keplr.defaultOptions = {
-      sign: { preferNoSetFee: true, preferNoSetMemo: true, disableBalanceCheck: true },
+      sign: { preferNoSetFee: true,
+        preferNoSetMemo: true,
+        disableBalanceCheck: true }
     };
   }
   if (window.leap) {
     window.leap.defaultOptions = {
-      sign: { preferNoSetFee: true, preferNoSetMemo: true, disableBalanceCheck: true },
+      sign: { preferNoSetFee: true,
+        preferNoSetMemo: true,
+        disableBalanceCheck: true }
     };
   }
   isAddressOnlyConnection.value = false;
@@ -83,11 +80,22 @@ const connectWallet = async (walletType: Wallets, address?: string) => {
   let slow: ReturnType<typeof setTimeout> | null = null;
   controller.value = new AbortController();
   try {
-    slow = setTimeout(() => (isSlowConnecting.value = true), 10000);
+    slow = setTimeout(
+      () => isSlowConnecting.value = true,
+      10000
+    );
     if (walletType == Wallets.addressOnly && address) {
-      await connect(walletType, address, controller.value.signal);
+      await connect(
+        walletType,
+        address,
+        controller.value.signal
+      );
     } else {
-      await connect(walletType, undefined, controller.value.signal);
+      await connect(
+        walletType,
+        undefined,
+        controller.value.signal
+      );
     }
     isConnecting.value = false;
     isSlowConnecting.value = false;
@@ -96,7 +104,7 @@ const connectWallet = async (walletType: Wallets, address?: string) => {
       clearTimeout(slow);
       slow = null;
     }
-  } catch (e) {
+  } catch (_e) {
     isConnecting.value = false;
     isSlowConnecting.value = false;
     isError.value = true;
@@ -128,9 +136,12 @@ const isValidAddress = computed(() => {
     return false;
   }
 });
-bus.on("open", () => {
-  isOpen.value = true;
-});
+bus.on(
+  "open",
+  () => {
+    isOpen.value = true;
+  }
+);
 </script>
 
 <template>

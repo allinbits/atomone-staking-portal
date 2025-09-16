@@ -1,18 +1,16 @@
 <script setup lang="ts">
+import { DeliverTxResponse } from "@cosmjs/stargate";
+import { useQueryClient } from "@tanstack/vue-query";
+import { useClipboard } from "@vueuse/core";
 import { ref } from "vue";
 
 import ModalWrap from "@/components/common/ModalWrap.vue";
-import UiInfo from "@/components/ui/UiInfo.vue";
-import Icon from "@/components/ui/Icon.vue";
 import CommonButton from "@/components/ui/CommonButton.vue";
-
-import { useWallet, Wallets } from "@/composables/useWallet";
-import { useClipboard } from "@vueuse/core";
+import Icon from "@/components/ui/Icon.vue";
+import UiInfo from "@/components/ui/UiInfo.vue";
 import { useValidators } from "@/composables/useValidators";
-
+import { useWallet, Wallets } from "@/composables/useWallet";
 import { toPlainObjectString } from "@/utility";
-import { DeliverTxResponse } from "@cosmjs/stargate";
-import { useQueryClient } from "@tanstack/vue-query";
 // Get QueryClient from the context
 const queryClient = useQueryClient();
 
@@ -44,16 +42,26 @@ const signClaim = async (isCLI = false) => {
     transacting.value = true;
     const depot =
       props.validatorAddress.length > 1
-        ? await collectAllRewards(props.validatorAddress, isCLI)
-        : await collectReward({ validatorAddress: props.validatorAddress[0] }, isCLI);
+        ? await collectAllRewards(
+          props.validatorAddress,
+          isCLI
+        )
+        : await collectReward(
+          { validatorAddress: props.validatorAddress[0] },
+          isCLI
+        );
     if ((depot as DeliverTxResponse).code !== 0 && !isCLI) {
       transacting.value = false;
       errorMsg.value = (depot as DeliverTxResponse).rawLog ?? toPlainObjectString(depot);
       displayState.value = "error";
     } else {
       transacting.value = false;
-      cliClaimInput.value = (isCLI ? depot : "") as string;
-      displayState.value = isCLI ? "CLI" : "claimed";
+      cliClaimInput.value = (isCLI
+        ? depot
+        : "") as string;
+      displayState.value = isCLI
+        ? "CLI"
+        : "claimed";
       queryClient.invalidateQueries({ queryKey: ["rewards"] });
     }
   } catch (e) {

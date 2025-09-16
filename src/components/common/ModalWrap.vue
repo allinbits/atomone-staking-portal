@@ -4,38 +4,63 @@ import { ref } from "vue";
 interface Props {
   visible: boolean;
 }
-const props = withDefaults(defineProps<Props>(), {
-  visible: false,
-});
+const props = withDefaults(
+  defineProps<Props>(),
+  {
+    visible: false
+  }
+);
 
 const content = ref<HTMLElement | null>(null);
 const frame = ref<HTMLElement | null>(null);
 const tl = (dir = true, cb: () => void) => {
   if (!content.value || !frame.value) return;
 
-  const modContent = content.value.animate([{ opacity: "0" }, { opacity: "1" }], {
-    fill: "both",
-    duration: 400,
-    easing: "cubic-bezier(0.42, 0, 0.58, 1)",
-    delay: dir ? 250 : 0,
-  });
+  const modContent = content.value.animate(
+    [
+      { opacity: "0" },
+      { opacity: "1" }
+    ],
+    {
+      fill: "both",
+      duration: 400,
+      easing: "cubic-bezier(0.42, 0, 0.58, 1)",
+      delay: dir
+        ? 250
+        : 0
+    }
+  );
   modContent.pause();
 
-  const modBg = frame.value.animate([{ transform: "scaleY(0)" }, { transform: "scaleY(1)" }], {
-    fill: "both",
-    duration: 400,
-    easing: "cubic-bezier(0.42, 0, 0.58, 1)",
-    delay: dir ? 0 : 200,
-  });
+  const modBg = frame.value.animate(
+    [
+      { transform: "scaleY(0)" },
+      { transform: "scaleY(1)" }
+    ],
+    {
+      fill: "both",
+      duration: 400,
+      easing: "cubic-bezier(0.42, 0, 0.58, 1)",
+      delay: dir
+        ? 0
+        : 200
+    }
+  );
   modBg.pause();
 
-  modContent.playbackRate = dir ? 1 : -1;
-  modBg.playbackRate = dir ? 1 : -1;
+  modContent.playbackRate = dir
+    ? 1
+    : -1;
+  modBg.playbackRate = dir
+    ? 1
+    : -1;
 
   if (dir) modContent.play();
   modBg.play();
 
-  (dir ? modContent : modBg).onfinish = () => cb();
+  (dir
+    ? modContent
+    : modBg).onfinish = () => cb();
 };
 </script>
 

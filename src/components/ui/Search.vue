@@ -6,12 +6,12 @@ const slots = useSlots();
 const input = ref();
 const focused = ref(false);
 
-function focus() {
+function focus () {
   input.value.focus();
   focused.value = true;
 }
 
-function unfocus() {
+function unfocus () {
   focused.value = false;
 }
 </script>

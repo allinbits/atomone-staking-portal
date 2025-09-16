@@ -1,23 +1,20 @@
 <script setup lang="ts">
+import { DeliverTxResponse } from "@cosmjs/stargate";
+import { useQueryClient } from "@tanstack/vue-query";
+import { useClipboard } from "@vueuse/core";
+import BigNumber from "bignumber.js";
+import { MsgDelegate } from "cosmjs-types/cosmos/staking/v1beta1/tx";
 import { computed, ref } from "vue";
 
-import { MsgDelegate } from "cosmjs-types/cosmos/staking/v1beta1/tx";
-
-import ModalWrap from "@/components/common/ModalWrap.vue";
-import UiInput from "@/components/ui/UiInput.vue";
-import UiInfo from "@/components/ui/UiInfo.vue";
-import Icon from "@/components/ui/Icon.vue";
-import CommonButton from "@/components/ui/CommonButton.vue";
-
-import { useWallet, Wallets } from "@/composables/useWallet";
-import { useClipboard } from "@vueuse/core";
-import { useValidators } from "@/composables/useValidators";
-
-import { toPlainObjectString } from "@/utility";
-import { DeliverTxResponse } from "@cosmjs/stargate";
 import chainConfig from "@/chain-config.json";
-import { useQueryClient } from "@tanstack/vue-query";
-import BigNumber from "bignumber.js";
+import ModalWrap from "@/components/common/ModalWrap.vue";
+import CommonButton from "@/components/ui/CommonButton.vue";
+import Icon from "@/components/ui/Icon.vue";
+import UiInfo from "@/components/ui/UiInfo.vue";
+import UiInput from "@/components/ui/UiInput.vue";
+import { useValidators } from "@/composables/useValidators";
+import { useWallet, Wallets } from "@/composables/useWallet";
+import { toPlainObjectString } from "@/utility";
 // Get QueryClient from the context
 const queryClient = useQueryClient();
 
@@ -41,7 +38,7 @@ const delegationDenomDisplay = computed(() => {
   return chainConfig.stakeCurrency.coinDenom;
 });
 
-const resetDeposit = () => (delegationAmount.value = null);
+const resetDeposit = () => delegationAmount.value = null;
 
 const toggleModal = (dir: boolean) => {
   isOpen.value = dir;
@@ -61,22 +58,29 @@ const signDelegation = async (isCLI = false) => {
     amount: {
       denom: chainConfig.stakeCurrency.coinMinimalDenom,
       amount:
-        BigNumber(delegationAmount.value)
-          .multipliedBy(10 ** delegationDenomDecimals.value)
-          .toFixed(0) ?? "",
-    },
+        BigNumber(delegationAmount.value).
+          multipliedBy(10 ** delegationDenomDecimals.value).
+          toFixed(0) ?? ""
+    }
   };
   try {
     transacting.value = true;
-    const depot = await createDelegation(delegationOptions, isCLI);
+    const depot = await createDelegation(
+      delegationOptions,
+      isCLI
+    );
     if ((depot as DeliverTxResponse).code !== 0 && !isCLI) {
       transacting.value = false;
       errorMsg.value = (depot as DeliverTxResponse).rawLog ?? toPlainObjectString(depot);
       displayState.value = "error";
     } else {
       transacting.value = false;
-      cliDelegationInput.value = (isCLI ? depot : "") as string;
-      displayState.value = isCLI ? "CLI" : "delegated";
+      cliDelegationInput.value = (isCLI
+        ? depot
+        : "") as string;
+      displayState.value = isCLI
+        ? "CLI"
+        : "delegated";
       queryClient.invalidateQueries({ queryKey: ["delegations"] });
       queryClient.invalidateQueries({ queryKey: ["validators"] });
     }
