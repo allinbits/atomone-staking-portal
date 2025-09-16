@@ -3,10 +3,13 @@ import { useLocalStorage } from "@vueuse/core";
 
 import Icon from "@/components/ui/Icon.vue";
 
-const isSecurityHeaderVisible = useLocalStorage("security-popup", true);
+const isSecurityHeaderVisible = useLocalStorage(
+  "security-popup",
+  true
+);
 const props = defineProps<{ link: string }>();
 
-function hideSecurityLabel() {
+function hideSecurityLabel () {
   isSecurityHeaderVisible.value = false;
 }
 </script>

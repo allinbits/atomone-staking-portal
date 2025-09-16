@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed } from "vue";
+import { computed, ref } from "vue";
 
 const model = defineModel<number>({ required: true });
 
@@ -7,19 +7,24 @@ const props = defineProps<{ values: string[] }>();
 const emits = defineEmits<{ (e: "select", value: number): void }>();
 const open = ref<boolean>(false);
 
-function handleSelect(index: number) {
+function handleSelect (index: number) {
   open.value = false;
-  emits("select", index);
+  emits(
+    "select",
+    index
+  );
 }
 
 const currentValues = computed(() => {
-  const values: { name: string; index: number }[] = [];
+  const values: { name: string;
+    index: number; }[] = [];
   for (let i = 0; i < props.values.length; i++) {
     if (i === model.value) {
       continue;
     }
 
-    values.push({ name: props.values[i], index: i });
+    values.push({ name: props.values[i],
+      index: i });
   }
 
   return values;

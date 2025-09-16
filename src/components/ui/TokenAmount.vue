@@ -14,7 +14,11 @@ const intAmount = computed(() => {
 });
 const fractAmount = computed(() => {
   if (props.amount) {
-    return new Intl.NumberFormat("en-US", { maximumFractionDigits: 8 }).format(props.amount % 1).substring(1);
+    return new Intl.NumberFormat(
+      "en-US",
+      { maximumFractionDigits: 8 }
+    ).format(props.amount % 1).
+      substring(1);
   } else {
     return "";
   }

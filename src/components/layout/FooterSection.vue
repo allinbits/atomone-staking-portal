@@ -1,8 +1,14 @@
 <script lang="ts" setup>
 const links = [
-  { title: "Twitter", url: "https://x.com/_atomone", icon: "twitter" },
-  { title: "Discord", url: "https://discord.com/invite/atomone", icon: "discord" },
-  { title: "Github", url: "https://github.com/atomone-hub", icon: "github" },
+  { title: "Twitter",
+    url: "https://x.com/_atomone",
+    icon: "twitter" },
+  { title: "Discord",
+    url: "https://discord.com/invite/atomone",
+    icon: "discord" },
+  { title: "Github",
+    url: "https://github.com/atomone-hub",
+    icon: "github" }
 ];
 </script>
 

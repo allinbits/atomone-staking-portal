@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import markdownit from "markdown-it";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import markdownit from "markdown-it";
 
 const { locale, messages } = useI18n();
 
-function isFaqPage(obj: unknown): obj is { content: Array<{ question: string; answer: string }> } {
+function isFaqPage (obj: unknown): obj is { content: Array<{ question: string;
+  answer: string; }>; } {
   return typeof obj === "object" && obj !== null && "content" in obj;
 }
 
@@ -21,7 +22,7 @@ const faqContent = computed(() => {
 const md = markdownit({
   html: true,
   linkify: true,
-  typographer: true,
+  typographer: true
 });
 </script>
 <template>

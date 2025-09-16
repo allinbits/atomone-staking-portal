@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { bus } from "@/bus";
 
+import { bus } from "@/bus";
 import ModalWrap from "@/components/common/ModalWrap.vue";
 
 const props = defineProps<{ isOpen?: boolean }>();
@@ -11,9 +11,12 @@ const refresh = () => {
   window.location.reload();
 };
 
-bus.on("error", () => {
-  isOpen.value = true;
-});
+bus.on(
+  "error",
+  () => {
+    isOpen.value = true;
+  }
+);
 </script>
 
 <template>
