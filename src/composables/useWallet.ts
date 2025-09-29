@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { getSigningAtomoneClient } from "@atomone/atomone-types/atomone/client";
+import { MsgMintPhotonResponse } from "@atomone/atomone-types/atomone/photon/v1/tx";
 import { EncodeObject, OfflineDirectSigner, OfflineSigner } from "@cosmjs/proto-signing";
-import { SigningStargateClient } from "@cosmjs/stargate";
 import { getOfflineSigner } from "@cosmostation/cosmos-client";
 import { OfflineAminoSigner } from "@keplr-wallet/types";
 import { computed, Ref, ref } from "vue";
@@ -166,10 +167,8 @@ const useWalletInstance = () => {
   const sendTx = async (msgs: EncodeObject[]) => {
     if (signer.value) {
       try {
-        const client = await SigningStargateClient.connectWithSigner(
-          chainInfo.rpc,
-          signer.value
-        );
+        const client = await getSigningAtomoneClient({ rpcEndpoint: chainInfo.rpc,
+          signer: signer.value });
         const simulate = await client.simulate(
           walletState.address.value,
           msgs,

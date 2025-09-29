@@ -205,6 +205,12 @@ export const messages = {
         delegated: "You staked",
         error: "Error"
       },
+      Mint: {
+        cta: "Mint Photon",
+        minted: "Minted",
+        toReceive: "You will receive:",
+        error: "Error"
+      },
       Claim: {
         cta: "Claim Rewards",
         ctamulti: "Claim All Rewards",
