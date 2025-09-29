@@ -6,7 +6,6 @@ import { SigningStargateClient } from "@cosmjs/stargate";
 import { getOfflineSigner } from "@cosmostation/cosmos-client";
 import { OfflineAminoSigner } from "@keplr-wallet/types";
 import { useQueryClient } from "@tanstack/vue-query";
-import { Sign } from "crypto";
 import { computed, nextTick, Ref, ref } from "vue";
 
 import chainInfo from "@/chain-config.json";
