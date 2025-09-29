@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getSigningAtomoneClient } from "@atomone/atomone-types/atomone/client";
-import { MsgMintPhotonResponse } from "@atomone/atomone-types/atomone/photon/v1/tx";
 import { EncodeObject, OfflineDirectSigner, OfflineSigner } from "@cosmjs/proto-signing";
 import { getOfflineSigner } from "@cosmostation/cosmos-client";
 import { OfflineAminoSigner } from "@keplr-wallet/types";
