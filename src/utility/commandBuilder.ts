@@ -17,6 +17,11 @@ export default class CommandBuilder {
     return builder.withAction("delegate");
   }
 
+  static Mint () {
+    const builder = new CommandBuilder("photon");
+    return builder.withAction("mint");
+  }
+
   static Redelegate () {
     const builder = new CommandBuilder("staking");
     return builder.withAction("redelegate");
