@@ -65,6 +65,7 @@ const signMint = async (isCLI = false) => {
   };
   try {
     transacting.value = true;
+    console.log(mintOptions);
     const minted = await createMint(
       mintOptions,
       isCLI
@@ -75,9 +76,11 @@ const signMint = async (isCLI = false) => {
       displayState.value = "error";
     } else {
       transacting.value = false;
-      const mintResponse = MsgMintPhotonResponse.decode((minted as DeliverTxResponse).msgResponses[0].value);
-      mintedAmount.value = Number(mintResponse.minted?.amount);
-      mintedRate.value = Number(mintResponse.conversionRate);
+      if (!isCLI) {
+        const mintResponse = MsgMintPhotonResponse.decode((minted as DeliverTxResponse).msgResponses[0].value);
+        mintedAmount.value = Number(mintResponse.minted?.amount);
+        mintedRate.value = Number(mintResponse.conversionRate);
+      }
       cliMintInput.value = (isCLI
         ? minted
         : "") as string;
