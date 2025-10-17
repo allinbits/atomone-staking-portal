@@ -67,7 +67,7 @@ const getStatusColor = (status?: string) => {
       <Transition name="drop">
         <div
           v-if="open"
-          class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[10001] flex flex-col min-w-96 max-w-2xl max-h-[80vh] overflow-y-auto text-left px-5 py-4 bg-grey-200 rounded shadow-2xl"
+          class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[10001] flex flex-col min-w-96 max-w-2xl max-h-[80vh] overflow-y-auto text-left px-5 py-4 bg-grey-200 rounded-sm shadow-2xl"
         >
           <div
             v-for="item in currentItems"
@@ -112,5 +112,28 @@ const getStatusColor = (status?: string) => {
 .bg-enter-from,
 .bg-leave-to {
   opacity: 0;
+}
+
+/* Custom thin scrollbar styling */
+.overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: #686868 transparent;
+}
+
+.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: #686868;
+  border-radius: 3px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: #9F9F9F;
 }
 </style>
