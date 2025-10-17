@@ -26,6 +26,7 @@ interface Props {
   validatorList: {
     description: { moniker: string };
     operator_address: string;
+    status: string;
   }[];
 }
 const props = defineProps<Props>();
@@ -140,8 +141,11 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
                     <div class="w-full flex flex-col ml-1 mt-3">
                       <span>Redelegate to:</span>
                       <DropDown
-                        :values="
-                          validatorList.map((x) => x.description.moniker + ' (' + shorten(x.operator_address) + ')')
+                        :items="
+                          validatorList.map((x) => ({
+                            name: x.description.moniker + ' (' + shorten(x.operator_address) + ')',
+                            status: x.status
+                          }))
                         "
                         :model-value="validatorIndex"
                         @select="handleValChange"

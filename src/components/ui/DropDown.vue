@@ -1,9 +1,16 @@
 <script lang="ts" setup>
 import { computed, ref } from "vue";
 
+interface DropDownItem {
+  name: string;
+  status?: string;
+}
+
 const model = defineModel<number>({ required: true });
 
-const props = defineProps<{ values: string[] }>();
+const props = defineProps<{
+  items: DropDownItem[];
+}>();
 const emits = defineEmits<{ (e: "select", value: number): void }>();
 const open = ref<boolean>(false);
 
@@ -15,56 +22,69 @@ function handleSelect (index: number) {
   );
 }
 
-const currentValues = computed(() => {
-  const values: { name: string;
-    index: number; }[] = [];
-  for (let i = 0; i < props.values.length; i++) {
-    if (i === model.value) {
-      continue;
-    }
-
-    values.push({ name: props.values[i],
-      index: i });
-  }
-
-  return values;
+const currentItems = computed(() => {
+  return props.items.
+    map((item, index) => ({
+      ...item,
+      index
+    })).
+    filter((item) => item.index !== model.value);
 });
+
+const getStatusColor = (status?: string) => {
+  return status === "BOND_STATUS_BONDED"
+    ? "bg-gradient-900"
+    : "bg-red-400";
+};
 </script>
 
 <template>
   <div class="relative flex flex-col min-w-56 select-none">
-    <Transition name="bg">
-      <div
-        v-show="open"
-        :class="open && ['fixed w-screen h-screen top-0 left-0 z-[999] bg-darkblur backdrop-blur-xs']"
-        @click="open = false"
-      ></div>
-    </Transition>
+    <!-- Backdrop -->
+    <Teleport to="body">
+      <Transition name="bg">
+        <div
+          v-show="open"
+          class="fixed w-screen h-screen top-0 left-0 z-[10000] bg-darkblur backdrop-blur-xs"
+          @click="open = false"
+        ></div>
+      </Transition>
+    </Teleport>
+
+    <!-- Trigger button -->
     <div
-      class="relative bg-grey-400 duration-200"
-      :class="open ? ['z-max rounded-t ease-in'] : ['rounded hover:bg-grey-200 delay-300 ease-out']"
+      class="relative bg-grey-400 duration-200 rounded"
+      :class="open ? ['hover:bg-grey-200'] : ['hover:bg-grey-200']"
     >
       <div class="flex flex-row justify-between cursor-pointer gap-3 px-5 py-4" @click="open = !open">
-        <div>{{ props.values[model] }}</div>
+        <div>{{ props.items[model].name }}</div>
         <Icon icon="CaretDown" />
       </div>
+    </div>
+
+    <!-- Centered dropdown list -->
+    <Teleport to="body">
       <Transition name="drop">
         <div
           v-if="open"
-          class="flex flex-col absolute origin-top top-full min-w-56 left-0 w-full z-50 text-left px-5 pb-2 bg-grey-200 rounded-b"
+          class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[10001] flex flex-col min-w-96 max-w-2xl max-h-[80vh] overflow-y-auto text-left px-5 py-4 bg-grey-200 rounded shadow-2xl"
         >
           <div
-            v-for="(data, index) in currentValues"
-            :key="index"
-            :class="model === index ? ['selected'] : []"
-            class="cursor-pointer py-3 hover:text-grey-50 text-200"
-            @click="handleSelect(data.index)"
+            v-for="item in currentItems"
+            :key="item.index"
+            class="cursor-pointer py-3 hover:text-grey-50 text-200 flex flex-row gap-3 items-center"
+            @click="handleSelect(item.index)"
           >
-            {{ data.name }}
+            <div
+              v-if="item.status"
+              class="w-2 h-2 rounded-full flex-shrink-0"
+              :class="getStatusColor(item.status)"
+            ></div>
+            <span>{{ item.name }}</span>
           </div>
         </div>
       </Transition>
-    </div>
+    </Teleport>
   </div>
 </template>
 
