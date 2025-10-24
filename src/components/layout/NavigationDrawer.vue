@@ -37,7 +37,7 @@ defineExpose({ openDrawer });
   <div>
     <!-- Hamburger Menu Button -->
     <button
-      class="p-2 text-light hover:text-grey-100 duration-200"
+      class="p-4 text-light hover:text-grey-100 duration-200"
       @click="openDrawer"
       aria-label="Menu"
     >
@@ -48,7 +48,7 @@ defineExpose({ openDrawer });
     <Transition name="backdrop-fade">
       <div
         v-if="isOpen"
-        class="fixed inset-0 bg-black bg-opacity-50 z-40"
+        class="p-4 fixed inset-0 bg-black bg-opacity-50 z-40"
         @click="closeDrawer"
       ></div>
     </Transition>
