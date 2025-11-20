@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import NavigationDrawer from "@/components/layout/NavigationDrawer.vue";
 import Mint from "@/components/popups/Mint.vue";
 import WalletConnect from "@/components/popups/WalletConnect.vue";
 import AuditStatus from "@/components/warnings/AuditStatus.vue";
@@ -13,7 +14,8 @@ const securityLink = "https://github.com/allinbits/security/";
       <div class="flex flex-col md:flex-row justify-start gap-x-8 md:items-center select-none relative">
         <router-link to="/" class="text-500 font-termina py-4">{{ $t("homepage.title") }}</router-link>
       </div>
-      <div class="flex flex-row items-center justify-center gap-8">
+      <!-- Desktop Navigation (hidden on smaller screens) -->
+      <div class="hidden lg:flex flex-row items-center justify-center gap-8">
         <router-link active-class="text-light" to="/faq" class="text-300 py-4 hover:text-light text-grey-100">{{
           $t("homepage.viewFaq")
         }}</router-link>
@@ -25,7 +27,13 @@ const securityLink = "https://github.com/allinbits/security/";
           v-if="Wallet.loggedIn.value"
           class="flex-grow"
         />
-        <WalletConnect class="hidden md:block" />
+
+        <WalletConnect />
+      </div>
+
+      <!-- Mobile Menu (visible on smaller screens) -->
+      <div class="lg:hidden">
+        <NavigationDrawer />
       </div>
     </nav>
     <AuditStatus :link="securityLink" />
