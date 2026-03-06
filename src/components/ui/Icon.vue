@@ -9,8 +9,8 @@
       >
         <defs>
           <linearGradient :id="id" x2="0" y2="1">
-            <stop offset="0%" :stop-color="gradientFrom ?? theme.colors.green['200']" />
-            <stop offset="100%" :stop-color="gradientTo ?? theme.colors.blue['300']" />
+            <stop offset="0%" :stop-color="gradientFrom ?? GRADIENT_FROM_DEFAULT" />
+            <stop offset="100%" :stop-color="gradientTo ?? GRADIENT_TO_DEFAULT" />
           </linearGradient>
         </defs>
       </svg>
@@ -37,10 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import resolveConfig from "tailwindcss/resolveConfig";
 import { computed, defineAsyncComponent, ref } from "vue";
-
-import tailwindConfig from "@/../tailwind.config";
 
 interface Props {
   icon: string;
@@ -70,9 +67,10 @@ if (props.gradient || props.gradientFrom && props.gradientTo) {
   idUrl.value = `url(#${id.value})`;
 }
 
-const titleCase = (content: string) => content && content[0].toUpperCase() + content.slice(1).toLowerCase();
+const GRADIENT_FROM_DEFAULT = "#D1E9CC"; // gradient-100
+const GRADIENT_TO_DEFAULT = "#03C5DC"; // gradient-900
 
-const { theme } = resolveConfig(tailwindConfig);
+const titleCase = (content: string) => content && content[0].toUpperCase() + content.slice(1).toLowerCase();
 
 const ico = computed(() => {
   const ico = props.icon;

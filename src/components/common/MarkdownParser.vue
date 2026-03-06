@@ -43,7 +43,7 @@ const getClasses = computed(() => {
   return [
     "prose",
     "max-w-none",
-    "prose:font-interVar",
+    "font-interVar",
     "prose-a:text-accent-100",
     "prose-p:text-light",
     "prose-code:text-accent-200",
