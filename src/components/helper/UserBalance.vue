@@ -2,7 +2,7 @@
 import { useQuery } from "@tanstack/vue-query";
 import { computed, Ref } from "vue";
 
-import chainConfig from "@/chain-config.json";
+import chainConfig from "@/chain-config";
 import { useWallet } from "@/composables/useWallet";
 import { formatAmount } from "@/utility";
 

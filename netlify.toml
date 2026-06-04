@@ -1,3 +1,15 @@
+# Chain target is chosen at build time (see src/chain-config.ts) and switched
+# per Netlify deploy context. Production builds target mainnet; deploy previews
+# (pull requests) and branch deploys target the testnet.
+[context.production.environment]
+  VITE_CHAIN_ENV = "mainnet"
+
+[context.deploy-preview.environment]
+  VITE_CHAIN_ENV = "testnet"
+
+[context.branch-deploy.environment]
+  VITE_CHAIN_ENV = "testnet"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -10,7 +22,10 @@
   https://staking.atom.one,
   '''
   Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-  Content-Security-Policy = "default-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; script-src 'self' 'wasm-unsafe-eval'; object-src 'none'; img-src 'self' data: https:; connect-src https://atomone-rpc.allinbits.com https://atomone-api.allinbits.com"
+  # Content-Security-Policy is intentionally NOT set here. Its connect-src must
+  # differ per deploy context (mainnet vs testnet endpoints), but netlify.toml
+  # headers apply to every context. It is emitted into a "_headers" file at build
+  # time instead — see the netlify-csp-headers plugin in vite.config.ts.
   X-Frame-Options = "SAMEORIGIN"
   X-Content-Type-Options = "nosniff"
   Referrer-Policy = "strict-origin"

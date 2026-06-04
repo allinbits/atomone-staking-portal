@@ -4,7 +4,7 @@ import { bech32 } from "bech32";
 import { computed, Ref, ref } from "vue";
 
 import { bus } from "@/bus";
-import chainConfig from "@/chain-config.json";
+import chainConfig from "@/chain-config";
 import UserBalance from "@/components//helper/UserBalance.vue";
 import ConnectButton from "@/components/ui/ConnectButton.vue";
 import { getWalletHelp, useWallet, Wallets } from "@/composables/useWallet";

@@ -3,7 +3,7 @@ import { Coin } from "@cosmjs/proto-signing";
 import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { computed, Ref } from "vue";
 
-import chainConfig from "@/chain-config.json";
+import chainConfig from "@/chain-config";
 import Claim from "@/components/popups/Claim.vue";
 import Delegate from "@/components/popups/Delegate.vue";
 import Redelegate from "@/components/popups/Redelegate.vue";
@@ -18,11 +18,162 @@ const queryClient = useQueryClient();
 const fetcher = () => fetch(chainConfig.rest + "cosmos/staking/v1beta1/validators?pagination.limit=1000").then((response) => response.json());
 const delegationsFetcher = (address: Ref<string>) => fetch(`${chainConfig.rest}cosmos/staking/v1beta1/delegations/${address.value}?pagination.limit=1000`).then((response) => response.json());
 const rewardsFetcher = (address: Ref<string>) => fetch(`${chainConfig.rest}cosmos/distribution/v1beta1/delegators/${address.value}/rewards?pagination.limit=1000`).then((response) => response.json());
+const nakamotoBonusCoefficientFetcher = () => fetch(chainConfig.rest + "cosmos/distribution/v1beta1/nakamoto_bonus_coefficient").then((response) => response.json());
+const annualProvisionsFetcher = () => fetch(chainConfig.rest + "cosmos/mint/v1beta1/annual_provisions").then((response) => response.json());
+const distributionParamsFetcher = () => fetch(chainConfig.rest + "cosmos/distribution/v1beta1/params").then((response) => response.json());
 const { data } = useQuery({
   queryKey: ["validators"],
   queryFn: () => fetcher(),
   placeholderData: keepPreviousData
 });
+const { data: nakamotoBonusCoefficientData } = useQuery({
+  queryKey: ["nakamotoBonusCoefficient"],
+  queryFn: () => nakamotoBonusCoefficientFetcher(),
+  placeholderData: keepPreviousData
+});
+const { data: annualProvisionsData } = useQuery({
+  queryKey: ["annualProvisions"],
+  queryFn: () => annualProvisionsFetcher(),
+  placeholderData: keepPreviousData
+});
+const { data: distributionParamsData } = useQuery({
+  queryKey: ["distributionParams"],
+  queryFn: () => distributionParamsFetcher(),
+  placeholderData: keepPreviousData
+});
+
+/*
+ * The bonus coefficient (η) is a LegacyDec serialized as a string (e.g.
+ * "0.030000000000000000") representing the share of rewards distributed equally.
+ * We surface it as a percentage to match the explanatory text. It is undefined
+ * on chains that don't expose the endpoint yet, in which case the box is hidden.
+ */
+const nakamotoBonusEta = computed(() => {
+  const coefficient = nakamotoBonusCoefficientData.value?.coefficient;
+  if (coefficient === undefined) {
+    return undefined;
+  }
+  return Number(coefficient);
+});
+const nakamotoBonusCoefficient = computed(() => {
+  if (nakamotoBonusEta.value === undefined) {
+    return undefined;
+  }
+  return new Intl.NumberFormat(
+    "en-US",
+    { style: "percent",
+      maximumFractionDigits: 2 }
+  ).format(nakamotoBonusEta.value);
+});
+
+/*
+ * Token total and count of the bonded validator set, shared by the Nakamoto
+ * Coefficient and the per-validator effective APR.
+ */
+const bondedStats = computed(() => {
+  const validators = data.value?.validators;
+  if (!validators) {
+    return undefined;
+  }
+  const bondedTokens = validators.
+    filter((validator: { status: string }) => validator.status === "BOND_STATUS_BONDED").
+    map((validator: { tokens: string }) => BigInt(validator.tokens));
+  if (bondedTokens.length === 0) {
+    return undefined;
+  }
+  const totalTokens = bondedTokens.reduce(
+    (sum: bigint, tokens: bigint) => sum + tokens,
+    0n
+  );
+  return { count: bondedTokens.length,
+    totalTokens,
+    sortedTokens: bondedTokens.toSorted((a: bigint, b: bigint) => {
+      if (a > b) {
+        return -1;
+      }
+      if (a < b) {
+        return 1;
+      }
+      return 0;
+    }) };
+});
+
+/*
+ * The Nakamoto Coefficient is the minimum number of validators whose combined
+ * voting power exceeds one-third of the total — the point at which they could
+ * halt consensus. It is not exposed by the chain, so we derive it from the
+ * bonded validators by accumulating tokens from largest to smallest until the
+ * running total passes one third.
+ */
+const nakamotoCoefficient = computed(() => {
+  const stats = bondedStats.value;
+  if (!stats) {
+    return undefined;
+  }
+  let cumulativeTokens = 0n;
+  let count = 0;
+  for (const tokens of stats.sortedTokens) {
+    cumulativeTokens += tokens;
+    count++;
+    if (cumulativeTokens * 3n > stats.totalTokens) {
+      break;
+    }
+  }
+  return count;
+});
+
+/*
+ * Baseline network staking APR, before the Nakamoto Bonus redistribution:
+ *   APR_base = annual_provisions * (1 - community_tax) / bonded_tokens
+ * Returned together with the bonus coefficient (η) and the average bonded stake
+ * so the per-validator effective APR can be derived without refetching.
+ */
+const aprInputs = computed(() => {
+  const annualProvisions = annualProvisionsData.value?.annual_provisions;
+  const communityTax = distributionParamsData.value?.params?.community_tax;
+  const eta = nakamotoBonusEta.value;
+  const stats = bondedStats.value;
+  if (annualProvisions === undefined || communityTax === undefined || eta === undefined || !stats) {
+    return undefined;
+  }
+  const bondedTokens = Number(stats.totalTokens);
+  if (bondedTokens === 0) {
+    return undefined;
+  }
+  const rewardPool = Number(annualProvisions) * (1 - Number(communityTax));
+  return { baseApr: rewardPool / bondedTokens,
+    eta,
+    averageStake: bondedTokens / stats.count };
+});
+
+/*
+ * Effective APR for delegating to a given validator, net of its commission.
+ * The Nakamoto Bonus splits rewards into a proportional share (1 - η) and an
+ * equal-per-validator share (η), so smaller validators earn a higher APR:
+ *   APR_i = APR_base * [(1 - η) + η * (avg_stake / validator_stake)]
+ * Only bonded validators earn staking rewards, so others return undefined.
+ */
+const getEffectiveApr = (validator: {
+  status: string;
+  tokens: string;
+  commission?: { commission_rates?: { rate?: string } };
+}) => {
+  const inputs = aprInputs.value;
+  if (!inputs || validator.status !== "BOND_STATUS_BONDED") {
+    return undefined;
+  }
+  const stake = Number(validator.tokens);
+  if (stake === 0) {
+    return undefined;
+  }
+  const grossApr = inputs.baseApr * (1 - inputs.eta + inputs.eta * inputs.averageStake / stake);
+  const commission = Number(validator.commission?.commission_rates?.rate ?? 0);
+  return new Intl.NumberFormat(
+    "en-US",
+    { style: "percent",
+      maximumFractionDigits: 2 }
+  ).format(grossApr * (1 - commission));
+};
 
 const orderedValidators = computed(() => {
   if (!data) {
@@ -90,6 +241,9 @@ setInterval(
     queryClient.invalidateQueries({ queryKey: ["rewards"] });
     queryClient.invalidateQueries({ queryKey: ["delegations"] });
     queryClient.invalidateQueries({ queryKey: ["validators"] });
+    queryClient.invalidateQueries({ queryKey: ["nakamotoBonusCoefficient"] });
+    queryClient.invalidateQueries({ queryKey: ["annualProvisions"] });
+    queryClient.invalidateQueries({ queryKey: ["distributionParams"] });
   },
   30000
 );
@@ -159,6 +313,35 @@ const getDisplayReward = (validator: string) => {
     <div v-if="userRewards.length > 0">
       <Claim :validator-address="userRewards.map((x) => x.validator_address)" />
     </div>
+    <!-- Network Decentralization -->
+    <div class="flex flex-col bg-grey-400 rounded-md p-4 gap-4">
+      <!-- Nakamoto Coefficient -->
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-row justify-between items-center gap-4 flex-wrap">
+          <span class="text-grey-50 text-200 font-bold">Nakamoto Coefficient</span>
+          <span class="text-light text-400">{{ nakamotoCoefficient ?? "—" }}</span>
+        </div>
+        <p class="text-grey-100 text-100">
+          The minimum number of validators whose combined voting power exceeds one third of the total —
+          the number that would need to collude to halt consensus. A higher value means the network is
+          more decentralized.
+        </p>
+      </div>
+      <!-- Nakamoto Bonus Coefficient -->
+      <div v-if="nakamotoBonusCoefficient" class="flex flex-col gap-2 border-t pt-4 border-grey-200">
+        <div class="flex flex-row justify-between items-center gap-4 flex-wrap">
+          <span class="text-grey-50 text-200 font-bold">Nakamoto Bonus Coefficient</span>
+          <span class="text-light text-400">{{ nakamotoBonusCoefficient }}</span>
+        </div>
+        <p class="text-grey-100 text-100">
+          The share of staking rewards (η) distributed equally across all validators instead of
+          proportionally to stake. This raises the reward-per-stake of smaller validators, giving
+          delegators an incentive to support them and improve the Nakamoto Coefficient above. It adjusts
+          weekly, ranging between 3% and 100%. Each validator's resulting effective APR — net of its
+          commission — is shown below.
+        </p>
+      </div>
+    </div>
     <div v-if="data">
       <div v-for="(validator, index) in orderedValidators" :key="index" class="flex flex-col">
         <div class="flex flex-col bg-grey-400 rounded-md mb-4 p-4 flex-wrap gap-4">
@@ -188,6 +371,14 @@ const getDisplayReward = (validator: string) => {
                 :denom="chainConfig.stakeCurrency.coinDenom"
                 class="text-grey-100 text-100"
               />
+            </div>
+            <!-- Effective APR (incl. Nakamoto Bonus, net of commission) -->
+            <div
+              v-if="getEffectiveApr(validator)"
+              class="flex flex-col gap-2 items-start md:items-end"
+            >
+              <span class="text-grey-50 text-100 text-left md:text-right">Effective APR</span>
+              <span class="text-gradient text-100 font-bold">{{ getEffectiveApr(validator) }}</span>
             </div>
             <div
               v-if="

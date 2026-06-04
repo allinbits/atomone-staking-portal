@@ -1,7 +1,7 @@
 import { MsgMintPhoton } from "@atomone/atomone-types/atomone/photon/v1/tx";
 import { EncodeObject } from "@cosmjs/proto-signing";
 
-import chainInfo from "@/chain-config.json";
+import chainInfo from "@/chain-config";
 import { useWallet } from "@/composables/useWallet";
 import CommandBuilder from "@/utility/commandBuilder.ts";
 
