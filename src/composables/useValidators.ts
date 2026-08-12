@@ -2,7 +2,7 @@ import { EncodeObject } from "@cosmjs/proto-signing";
 import { MsgWithdrawDelegatorReward } from "cosmjs-types/cosmos/distribution/v1beta1/tx";
 import { MsgBeginRedelegate, MsgDelegate, MsgUndelegate } from "cosmjs-types/cosmos/staking/v1beta1/tx";
 
-import chainInfo from "@/chain-config.json";
+import chainInfo from "@/chain-config";
 import { useWallet } from "@/composables/useWallet";
 import CommandBuilder from "@/utility/commandBuilder";
 

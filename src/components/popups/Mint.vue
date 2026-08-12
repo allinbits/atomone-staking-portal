@@ -6,7 +6,7 @@ import { useClipboard } from "@vueuse/core";
 import BigNumber from "bignumber.js";
 import { computed, ref } from "vue";
 
-import chainConfig from "@/chain-config.json";
+import chainConfig from "@/chain-config";
 import ModalWrap from "@/components/common/ModalWrap.vue";
 import CommonButton from "@/components/ui/CommonButton.vue";
 import Icon from "@/components/ui/Icon.vue";

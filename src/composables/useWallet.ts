@@ -8,7 +8,7 @@ import { OfflineAminoSigner } from "@keplr-wallet/types";
 import { useQueryClient } from "@tanstack/vue-query";
 import { computed, nextTick, Ref, ref } from "vue";
 
-import chainInfo from "@/chain-config.json";
+import chainInfo from "@/chain-config";
 
 export enum Wallets {
   keplr = "Keplr",

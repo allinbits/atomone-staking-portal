@@ -1,7 +1,7 @@
 import { Coin } from "@cosmjs/proto-signing";
 import BigNumber from "bignumber.js";
 
-import chainConfig from "../chain-config.json";
+import chainConfig from "../chain-config";
 
 export function capitalizeFirstLetter (text: string) {
   return text.charAt(0).toUpperCase() + text.slice(1);

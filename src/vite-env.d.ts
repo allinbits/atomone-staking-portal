@@ -12,4 +12,7 @@ declare global {
     leap: Keplr;
     cosmostation: unknown;
   }
+  interface ImportMetaEnv {
+    readonly VITE_CHAIN_ENV?: "mainnet" | "testnet";
+  }
 }
